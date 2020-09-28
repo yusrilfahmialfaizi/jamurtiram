@@ -107,7 +107,7 @@ class PerhitunganController extends Controller
                 // 'field2_N'  => $datanormalHum,
                 'target_N'  => $datanormalTarget);
             // DB::table('data_normalisasi')->insert($dataN);
-            DB::table('data_normalisasi')->where('data_n_id', $dtN->data_n_id)->update($dataN);
+            // DB::table('data_normalisasi')->where('data_n_id', $dtN->data_n_id)->update($dataN);
         }
         $data_N = DB::table('data_normalisasi')->get();
         echo "<table style='border: 1px solid black;
