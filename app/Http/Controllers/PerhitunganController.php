@@ -12,6 +12,15 @@ class PerhitunganController extends Controller
         $dataset = DB::table('data')->get();
         $data_Norm = DB::table('data_normalisasi')->get();
         // return view('contents/coba', ['dataset' => $dataset]);
+        $numEpoch   = 1000;
+        $alpha      = 0.1;
+        $bias       = 1;
+        $bX1K1      = 0.1;
+        $bX1K2      = 0.2;
+        $bX2K1      = 0.3;
+        $bX2K2      = 0.1;
+        $bK1L       = 0.2;
+        $bK2L       = 0.3;
         foreach ($data_Norm as $dtN) {
             # code...
             $target = $dtN->field1 + $dtN->field2;
@@ -135,5 +144,68 @@ class PerhitunganController extends Controller
             </tr>";
         }
         echo "</table>";
+
+        for ($i=0; $i <= $numEpoch ; $i++) { 
+            # code...
+            $no = 0;
+            foreach ($data_Norm as $dt_N) {
+                # code...
+                $netK1  = $bias + (($dt_N->field1_N * $bX1K1) + ($dt_N->field2_N * $bX2K1));
+                $netK2  = $bias + (($dt_N->field1_N * $bX1K2) + ($dt_N->field2_N * $bX2K2));
+                // echo "<pre>";
+                // echo $netK1." ".$netK2;
+                // echo $netK1;
+                // echo $netK2;
+                // echo "</pre>";
+
+                $K1     = 1 / (1 + exp(-$netK1));
+                $K2     = 1 / (1 + exp(-$netK2));
+
+                $netL   = $bias + (($K1 * $bK1L) + ($K2 * $bK2L));
+                $L      = 1 / (1 + exp(-$netL));
+
+                $tau    = ($dt_N->target_N - $L) * $L * (1 - $L);
+
+                $deltaNetK1     = $alpha * $tau * $K1;
+                $deltaNetK2     = $alpha * $tau * $K2;
+
+                $taunet1    = $tau * $bK1L;
+                $taunet2    = $tau * $bK2L;
+
+                $tau1   = $taunet1 * $K1 * (1 - $K1);
+                $tau2   = $taunet2 * $K2 * (1 - $K2);
+
+                $deltaVx1k1 = $alpha * $tau1 * $dt_N->field1_N;
+                $deltaVx1k2 = $alpha * $tau2 * $dt_N->field1_N;
+                $deltaVx2k1 = $alpha * $tau1 * $dt_N->field2_N;
+                $deltaVx2k2 = $alpha * $tau2 * $dt_N->field2_N;
+                
+                $WK1L_baru = $bK1L + $netK1;
+                $WK2L_baru = $bK2L + $netK2;
+
+                $bx1k1_b = $bX1K1 + $deltaVx1k1;
+                $bx1k2_b = $bX1K2 + $deltaVx1k2;
+                $bx2k1_b = $bX2K1 + $deltaVx2k1;
+                $bx2k2_b = $bX2K2 + $deltaVx2k2;
+                echo "<pre>";
+                echo $bx1k1_b."\n";
+                echo $bx1k2_b."\n";
+                echo $bx2k1_b."\n";
+                echo $bx2k2_b."\n\n\n";
+                echo "</pre>";
+            }
+            // echo "<pre>";
+            // echo $bx1k1_b."\n";
+            // echo $bx1k2_b."\n";
+            // echo $bx2k1_b."\n";
+            // echo $bx2k2_b."\n\n\n";
+            // echo "</pre>";
+        }
+        echo "<pre>";
+        echo round($bx1k1_b, 2)."\n";
+        echo round($bx1k2_b, 2)."\n";
+        echo round($bx2k1_b, 2)."\n";
+        echo round($bx2k2_b, 2)."\n";
+        echo "</pre>";
     }
 }
