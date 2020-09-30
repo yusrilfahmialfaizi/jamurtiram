@@ -12,15 +12,15 @@ class PerhitunganController extends Controller
         $dataset = DB::table('data')->get();
         $data_Norm = DB::table('data_normalisasi')->get();
         // return view('contents/coba', ['dataset' => $dataset]);
-        $numEpoch   = 1000;
+        $numEpoch   = 3;
         $alpha      = 0.1;
         $bias       = 1;
-        $bX1K1      = 0.1;
-        $bX1K2      = 0.2;
-        $bX2K1      = 0.3;
-        $bX2K2      = 0.1;
-        $bK1L       = 0.2;
-        $bK2L       = 0.3;
+        $bX1Z1      = 0.1;
+        $bX1Z2      = 0.2;
+        $bX2Z1      = 0.3;
+        $bX2Z2      = 0.1;
+        $bZ1Y       = 0.2;
+        $bZ2Y       = 0.3;
         foreach ($data_Norm as $dtN) {
             # code...
             $target = $dtN->field1 + $dtN->field2;
@@ -144,68 +144,123 @@ class PerhitunganController extends Controller
             </tr>";
         }
         echo "</table>";
-
-        for ($i=0; $i <= $numEpoch ; $i++) { 
+        
+        $no = 0;
+        for ($i=1; $i <= $numEpoch ; $i++) { 
             # code...
-            $no = 0;
+            $no++;
+            echo "Iterasi : ".$i;
             foreach ($data_Norm as $dt_N) {
                 # code...
-                $netK1  = $bias + (($dt_N->field1_N * $bX1K1) + ($dt_N->field2_N * $bX2K1));
-                $netK2  = $bias + (($dt_N->field1_N * $bX1K2) + ($dt_N->field2_N * $bX2K2));
-                // echo "<pre>";
-                // echo $netK1." ".$netK2;
-                // echo $netK1;
-                // echo $netK2;
-                // echo "</pre>";
+                echo "\n\n\n ID : ".$dt_N->data_n_id;
 
-                $K1     = 1 / (1 + exp(-$netK1));
-                $K2     = 1 / (1 + exp(-$netK2));
+                #####langkah 4#####
+                // menjumlahkan bobot sinyal input ke hidden layer
+                $Z_inZ1  = $bias + (($dt_N->field1_N * $bX1Z1) + ($dt_N->field2_N * $bX2Z1));
+                $Z_inZ2  = $bias + (($dt_N->field1_N * $bX1Z2) + ($dt_N->field2_N * $bX2Z2));
+                echo "<pre> Z_inZ1 : ";
+                echo $Z_inZ1 . "\n\n\n Z_inZ2 : ";
+                echo $Z_inZ2 . "\n\n\n";
+                echo "</pre>";
 
-                $netL   = $bias + (($K1 * $bK1L) + ($K2 * $bK2L));
-                $L      = 1 / (1 + exp(-$netL));
+                //menghitung aktifasi input ke hidden layer
+                $Z1     = 1 / (1 + exp(-$Z_inZ1));
+                $Z2     = 1 / (1 + exp(-$Z_inZ2));
+                echo "<pre> Z1 : ";
+                echo $Z1 . "\n\n\n Z2 : ";
+                echo $Z2 . "\n\n\n";
+                echo "</pre>";
 
-                $tau    = ($dt_N->target_N - $L) * $L * (1 - $L);
+                #####langkah 5#####
+                // menjumlahkan bobot sinyal hidden layer ke output
+                $Y_inY   = $bias + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y));
+                echo "<pre>Y_inY : ";
+                echo $Y_inY . "\n\n\n";
+                echo "</pre>";
 
-                $deltaNetK1     = $alpha * $tau * $K1;
-                $deltaNetK2     = $alpha * $tau * $K2;
+                // menghitung aktifasi hidden layer ke output
+                $Y      = 1 / (1 + exp(-$Y_inY));
+                echo "<pre> Y : ";
+                echo $Y . "\n\n\n";
+                echo "</pre>";
 
-                $taunet1    = $tau * $bK1L;
-                $taunet2    = $tau * $bK2L;
+                #####langkah 6#####
+                // menghitung informasi error output
+                echo "tau    = (".$dt_N->target_N ."-". $Y.") * ".$Y ."* (1 -". $Y.")";
+                $tau    = ($dt_N->target_N - $Y) * $Y * (1 - $Y);
+                echo "<pre> Tau : ";
+                echo $tau . "\n\n\n";
+                echo "</pre>";
 
-                $tau1   = $taunet1 * $K1 * (1 - $K1);
-                $tau2   = $taunet2 * $K2 * (1 - $K2);
+                // menghitung bobot baru
+                $deltaWZ1     = $alpha * $tau * $Z1;
+                $deltaWZ2     = $alpha * $tau * $Z2;
+                echo "<pre> Bobot Baru WZ1 : ";
+                echo $deltaWZ1 . "\n\n\n Bobot Baru WZ2 : ";
+                echo $deltaWZ2 . "\n\n\n";
+                echo "</pre>";
 
-                $deltaVx1k1 = $alpha * $tau1 * $dt_N->field1_N;
-                $deltaVx1k2 = $alpha * $tau2 * $dt_N->field1_N;
-                $deltaVx2k1 = $alpha * $tau1 * $dt_N->field2_N;
-                $deltaVx2k2 = $alpha * $tau2 * $dt_N->field2_N;
+                #####langkah 7#####
+                // menghitung penjumlahan kesalahan dari hidden
+                $tau_in1    = $tau * $bZ1Y;
+                $tau_in2    = $tau * $bZ2Y;
+                echo "<pre> Tau_in1 : ";
+                echo $tau_in1 . "\n\n\n Tau_in2 : ";
+                echo $tau_in2 . "\n\n\n";
+                echo "</pre>";
+
+                // menghitung aktifasi kesalahan dari hidden
+                $tau1   = $tau_in1 * $Z1 * (1 - $Z1);
+                $tau2   = $tau_in2 * $Z2 * (1 - $Z2);
+                echo "<pre> Aktifasi Tau1 : ";
+                echo $tau1 . "\n\n\n Aktifasi Tau2 : ";
+                echo $tau2 . "\n\n\n";
+                echo "</pre>";
+
+                // menghitung koreksi bobotnya untuk memperbaharui bobot hidden ke output dengan learning rate / a =  o,1
+                $deltaVx1Z1 = $alpha * $tau1 * $dt_N->field1_N;
+                $deltaVx1Z2 = $alpha * $tau2 * $dt_N->field1_N;
+                $deltaVx2Z1 = $alpha * $tau1 * $dt_N->field2_N;
+                $deltaVx2Z2 = $alpha * $tau2 * $dt_N->field2_N;
+                echo "<pre> DeltaVx1Z1 : ";
+                echo $deltaVx1Z1 . "\n\n\n DeltaVx1Z2 : ";
+                echo $deltaVx1Z2 . "\n\n\n DeltaVx2Z1 : ";
+                echo $deltaVx2Z1 . "\n\n\n DeltaVx2Z2 : ";
+                echo $deltaVx2Z2 . "\n\n\n";
+                echo "</pre>";
                 
-                $WK1L_baru = $bK1L + $netK1;
-                $WK2L_baru = $bK2L + $netK2;
+                // menghitung pembaruan bobot hidden ke output
+                $bZ1Y = $bZ1Y + $Z_inZ1;
+                $bZ2Y = $bZ2Y + $Z_inZ2;
+                echo "<pre> bobot baru Z1Y : ";
+                echo $bZ1Y . "\n\n\n bobot baru Z2Y : ";
+                echo $bZ2Y . "\n\n\n";
+                echo "</pre>";
 
-                $bx1k1_b = $bX1K1 + $deltaVx1k1;
-                $bx1k2_b = $bX1K2 + $deltaVx1k2;
-                $bx2k1_b = $bX2K1 + $deltaVx2k1;
-                $bx2k2_b = $bX2K2 + $deltaVx2k2;
-                echo "<pre>";
-                echo $bx1k1_b."\n";
-                echo $bx1k2_b."\n";
-                echo $bx2k1_b."\n";
-                echo $bx2k2_b."\n\n\n";
+                // menghitung pembaruan bobot input ke hidden
+                $bX1Z1 = $bX1Z1 + $deltaVx1Z1;
+                $bX1Z2 = $bX1Z2 + $deltaVx1Z2;
+                $bX2Z1 = $bX2Z1 + $deltaVx2Z1;
+                $bX2Z2 = $bX2Z2 + $deltaVx2Z2;
+                echo "<pre> bobot baru x1z1 : ";
+                echo $bX1Z1."\n\n bobot baru x1z2 : ";
+                echo $bX1Z2."\n\n bobot baru x2z1 : ";
+                echo $bX2Z1."\n\n bobot baru x2z2 : ";
+                echo $bX2Z2."\n\n\n";
                 echo "</pre>";
             }
             // echo "<pre>";
             // echo $bx1k1_b."\n";
-            // echo $bx1k2_b."\n";
+            // echo $bx1Z2_b."\n";
             // echo $bx2k1_b."\n";
-            // echo $bx2k2_b."\n\n\n";
+            // echo $bx2Z2_b."\n\n\n";
             // echo "</pre>";
         }
-        echo "<pre>";
-        echo round($bx1k1_b, 2)."\n";
-        echo round($bx1k2_b, 2)."\n";
-        echo round($bx2k1_b, 2)."\n";
-        echo round($bx2k2_b, 2)."\n";
-        echo "</pre>";
+        // echo "<pre>";
+        // echo round($bx1k1_b, 2)."\n";
+        // echo round($bx1Z2_b, 2)."\n";
+        // echo round($bx2k1_b, 2)."\n";
+        // echo round($bx2Z2_b, 2)."\n";
+        // echo "</pre>";
     }
 }
