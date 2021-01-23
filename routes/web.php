@@ -21,3 +21,4 @@ Route::post('/jamurtiram/auth', 'AuthController@auth');
 Route::get('/jamurtiram/dashboard', 'DashboardController@index');
 Route::get('/jamurtiram/data', 'DataController@index');
 Route::get('/jamurtiram/perhitungan', 'PerhitunganController@index');
+Route::get('/jamurtiram/perhitungan/testing', 'PerhitunganController@testing');
