@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/jamurtiram', function () {
-//     return view('index');
+// Route::get('/', function () {
+//     return view('welcome');
 // });
-Route::get('/jamurtiram', 'AuthController@index');
-Route::post('/jamurtiram/auth', 'AuthController@auth');
-Route::get('/jamurtiram/dashboard', 'DashboardController@index');
-Route::get('/jamurtiram/data', 'DataController@index');
-Route::get('/jamurtiram/perhitungan', 'PerhitunganController@index');
-Route::get('/jamurtiram/perhitungan/testing', 'PerhitunganController@testing');
+Route::get('/', 'AuthController@index');
+Route::get('/dashboard', 'DashboardController@index');
+Route::get('/data', 'DataController@index');
+Route::get('/pengujian', 'PerhitunganController@index');
+Route::get('/perhitungan/testing', 'PerhitunganController@testing');
+Route::get('/firebase', 'FirebaseController@index');
+Route::post('/perhitungan/training', 'PerhitunganController@training');

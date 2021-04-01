@@ -8,7 +8,7 @@ class AuthController extends Controller
 {
     //
     public function index(){
-        return view ('contents/auth_login');
+        return view ('contents/login/auth_login');
     }
 
     public function auth(){

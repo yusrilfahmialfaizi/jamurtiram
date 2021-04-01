@@ -10,6 +10,6 @@ class DataController extends Controller
     //
     public function index(){
         $dataset = DB::table('data_training')->get();
-        return view('contents/dataset', ['dataset' => $dataset]);
+        return view('contents/main/data_training', ['dataset' => $dataset]);
     }
 }
