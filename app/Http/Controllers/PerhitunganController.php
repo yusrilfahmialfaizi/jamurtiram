@@ -22,47 +22,49 @@ class PerhitunganController extends Controller
         $alpha              = $request->input("learning_rate");
         $suhu               = $request->input("suhu");
         $kelembapan         = $request->input("kelembapan");
-        echo "<pre>";
-        print_r($numEpoch.$alpha.$suhu.$kelembapan);
-        print_r($request->all());
-        echo "</pre>";
+        $thresh             = $request->input("error");
+        $count              = DB::table("data_training")->count();
+        // echo "<pre>";
+        // print_r($numEpoch.$alpha.$suhu.$kelembapan.$thresh);
+        // // print_r($request->input('name', 'epoch'));
+        // echo "</pre>";
         // $numEpoch   = 1000;
         // $alpha      = 0.1;
-        $thresh     = 0.00001;
+        // $thresh     = 0.0001;
         $Error      = 0.0;
         // $bias       = 1;
         $beta       = round(0.7 * sqrt(3), 2);
         $bias       = rand(-$beta * 100, $beta * 100)/100;
 
 
-        echo $beta*100 . "\n";
-        echo $bias."\n";
+        // echo $beta*100 . "\n";
+        // echo $bias."\n";
 
         
-        $bX1Z1      = rand(1, 5) / 10;
-        $bX1Z2      = rand(1, 5) / 10;
-        $bX1Z3      = rand(1, 5) / 10;
+        $bX1Z1      = rand(-5, 5) / 10;
+        $bX1Z2      = rand(-5, 5) / 10;
+        $bX1Z3      = rand(-5, 5) / 10;
 
-        $bX2Z1      = rand(1, 5) / 10;
-        $bX2Z2      = rand(1, 5) / 10;
-        $bX2Z3      = rand(1, 5) / 10;
+        $bX2Z1      = rand(-5, 5) / 10;
+        $bX2Z2      = rand(-5, 5) / 10;
+        $bX2Z3      = rand(-5, 5) / 10;
         
-        // $bX3Z1      = rand(1, 5) / 10; //(-5, 5)
-        // $bX3Z2      = rand(1, 5) / 10;
-        // $bX3Z3      = rand(1, 5) / 10;
+        // $bX3Z1      = rand(-5, 5) / 10; //(-5, 5)
+        // $bX3Z2      = rand(-5, 5) / 10;
+        // $bX3Z3      = rand(-5, 5) / 10;
 
 
-        $bZ1Y       = rand(1, 5) / 10;
-        $bZ2Y       = rand(1, 5) / 10;
-        $bZ3Y       = rand(1, 5) / 10;
+        $bZ1Y       = rand(-5, 5) / 10;
+        $bZ2Y       = rand(-5, 5) / 10;
+        $bZ3Y       = rand(-5, 5) / 10;
 
         // echo "<pre>";
-        echo $bX1Z1."\n\n\n";
-        echo $bX1Z2."\n\n\n";
-        echo $bX1Z3."\n\n\n";
-        echo $bX2Z1."\n\n\n";
-        echo $bX2Z2."\n\n\n";
-        echo $bX2Z3."\n\n\n";
+        // echo $bX1Z1."\n\n\n";
+        // echo $bX1Z2."\n\n\n";
+        // echo $bX1Z3."\n\n\n";
+        // echo $bX2Z1."\n\n\n";
+        // echo $bX2Z2."\n\n\n";
+        // echo $bX2Z3."\n\n\n";
         // echo $bX3Z1."\n\n\n";
         // echo $bX3Z2."\n\n\n";
         // echo $bX3Z3."\n\n\n";
@@ -72,12 +74,12 @@ class PerhitunganController extends Controller
         $V2         = round(sqrt((pow($bX2Z1,2) + pow($bX2Z2,2))),2);
         $V3         = round(sqrt((pow($bX1Z3,2) + pow($bX2Z3,2))),2);
 
-        echo "<pre>";
-        echo "v1 : ". $V1 ."\n\n\n";
-        echo "v2 : ". $V2 ."\n\n\n";
-        echo "v3 : ". $V3 ."\n\n\n";
-        echo $beta;
-        echo "</pre>";
+        // echo "<pre>";
+        // echo "v1 : ". $V1 ."\n\n\n";
+        // echo "v2 : ". $V2 ."\n\n\n";
+        // echo "v3 : ". $V3 ."\n\n\n";
+        // echo $beta;
+        // echo "</pre>";
 
         $bX1Z1 = round(($beta*$bX1Z1)/$V1, 2);
         $bX2Z1 = round(($beta*$bX2Z1)/$V1, 2);
@@ -91,13 +93,13 @@ class PerhitunganController extends Controller
         $bX2Z3 = round(($beta*$bX1Z3)/$V3, 2);
         // $bX3Z3 = round(($beta*$bX1Z2)/$V3, 2);
 
-        echo $bX1Z1."\n\n\n";
-        echo $bX1Z2."\n\n\n";
-        echo $bX1Z3."\n\n\n"." ";
+        // echo $bX1Z1."\n\n\n";
+        // echo $bX1Z2."\n\n\n";
+        // echo $bX1Z3."\n\n\n"." ";
 
-        echo $bX2Z1."\n\n\n";
-        echo $bX2Z2."\n\n\n";
-        echo $bX2Z3."\n\n\n"." ";
+        // echo $bX2Z1."\n\n\n";
+        // echo $bX2Z2."\n\n\n";
+        // echo $bX2Z3."\n\n\n"." ";
 
         // echo $bX3Z1."\n\n\n";
         // echo $bX3Z2."\n\n\n";
@@ -110,14 +112,14 @@ class PerhitunganController extends Controller
             $epochke = $i;
             
             $no++;
-            echo "<pre>";
-            echo "Epoh : ".$i."\n\n";
-            echo "Error : ". $Error."\n\n";
-            echo "</pre>";
+            // echo "<pre>";
+            // echo "Epoh : ".$i."\n\n";
+            // echo "Error : ". $Error."\n\n";
+            // echo "</pre>";
 
             foreach ($data_Norm as $dt_N) {
                 # code...
-                echo "\n\n\n ID : ".$dt_N->entry_id;
+                // echo "\n\n\n ID : ".$dt_N->entry_id;
 
                 #####langkah 4#####
                 // menjumlahkan bobot sinyal input ke hidden layer
@@ -250,10 +252,11 @@ class PerhitunganController extends Controller
                 #####langkah 9#####
                 // tes kondisi berhenti
                 // Error < Error maksimum
-                $Error = 0.5 * pow($dt_N->target_N - $Y,2); 
-                echo "<pre>";
-                echo "Error : ". $Error."\n\n";
-                echo "</pre>";
+                // $Error = 0.5 * pow($dt_N->target_N - $Y,2); 
+                $Error = (pow(($dt_N->target_N - $Y),2)) / $count; //MSE
+                // echo "<pre>";
+                // echo "Error : ". $Error."\n\n";
+                // echo "</pre>";
                 // if ($i == 1000) {
                     // if ($Error < $thresh) {
                 if ($Error < $thresh) {
@@ -283,20 +286,20 @@ class PerhitunganController extends Controller
             if ($Error < $thresh){
                 break;
             }
-            echo "<pre>";
-            echo "EPOCH ke : ". $epochke;
-            echo "</pre>";
+            // echo "<pre>";
+            // echo "EPOCH ke : ". $epochke;
+            // echo "</pre>";
         }
 
         // }
-        echo "<pre> bobot baru x1z1 : ";
-        echo $bX1Z1."\n\n bobot baru x1z2 : ";
-        echo $bX1Z2."\n\n bobot baru x2z1 : ";
-        echo $bX2Z1."\n\n bobot baru x2z2 : ";
-        echo $bX2Z2."\n\n bias baru : ";
-        echo $bias."\n\n\n";
-        echo "</pre>";
-        // $this->testing($bX1Z1, $bX1Z2, $bX2Z1, $bX2Z2, $bias, $bZ1Y, $bZ2Y, $suhu, $kelembapan);
+        // echo "<pre> bobot baru x1z1 : ";
+        // echo $bX1Z1."\n\n bobot baru x1z2 : ";
+        // echo $bX1Z2."\n\n bobot baru x2z1 : ";
+        // echo $bX2Z1."\n\n bobot baru x2z2 : ";
+        // echo $bX2Z2."\n\n bias baru : ";
+        // echo $bias."\n\n\n";
+        // echo "</pre>";
+        $this->testing($bX1Z1, $bX1Z2, $bX2Z1, $bX2Z2, $bias, $bZ1Y, $bZ2Y, $suhu, $kelembapan);
         // echo "<pre> bobot baru x1z1 : ";
         // echo $bX1Z1."\n\n bobot baru x1z2 : ";
         // echo $bX1Z2."\n\n bobot baru x2z1 : ";
@@ -466,24 +469,27 @@ class PerhitunganController extends Controller
 
     function testing($bX1Z1, $bX1Z2, $bX2Z1, $bX2Z2, $bias, $bZ1Y, $bZ2Y, $suhu, $kelembapan){
     // public function testing(){
-        // $dataset    = DB::table('data_testing')->get();
 
-        // // get max
-        // $datamaxTemp = DB::table('data_testing')->max('humidity');
-        // $datamaxHum = DB::table('data_testing')->max('temperature');
+        $dataset    = DB::table('data_testing')->get();
+
+        // get max
+        $datamaxHum = DB::table('data_testing')->max('humidity');
+        $datamaxTemp = DB::table('data_testing')->max('temperature');
+        $datamaxTarget = DB::table('data_testing')->max('target');
         // echo "<pre>datamaxTemp = ".$datamaxTemp;
         // echo "\n";
         // echo "datamaxHum = ".$datamaxHum;
         // echo "\n\n\n</pre>";
-        // // echo "<pre>";
-        // // print_r($datamaxTemp);
-        // // print_r($datamaxHum);
-        // // print_r($datamaxTarget);
-        // // echo "</pre>";
-        // ######################
-        // // get min
-        // $dataminTemp = DB::table('data_testing')->min('humidity');
-        // $dataminHum = DB::table('data_testing')->min('temperature');
+        // echo "<pre>";
+        // print_r($datamaxTemp);
+        // print_r($datamaxHum);
+        // print_r($datamaxTarget);
+        // echo "</pre>";
+        ######################
+        // get min
+        $dataminHum = DB::table('data_testing')->min('humidity');
+        $dataminTemp = DB::table('data_testing')->min('temperature');
+        $dataminTarget = DB::table('data_testing')->min('target');
         // echo "<pre>dataminTemp = ".$dataminTemp;
         // echo "\n";
         // echo "dataminHum = ".$dataminHum;
@@ -493,6 +499,7 @@ class PerhitunganController extends Controller
         // print_r($dataminHum);
         // echo "</pre>";
         ################
+
         // normalisasi data
         //  foreach ($dataset as $data) {
         //     # code...
@@ -540,15 +547,38 @@ class PerhitunganController extends Controller
         #####langkah 0#####
         // inisialisasi bobot
         // $numEpoch = 1000;
-        $bX1Z1          = $bX1Z1;
-        $bX1Z2          = $bX1Z2;
-        $bX2Z1          = $bX2Z1;
-        $bX2Z2          = $bX2Z2;
-        $bZ1Y           = $bZ1Y;
-        $bZ2Y           = $bZ2Y;
-        $bias           = $bias;
-        $suhu           = $suhu;
-        $kelembapan     = $kelembapan;
+        $bX1Z1          = floatval($bX1Z1);
+        $bX1Z2          = floatval($bX1Z2);
+        $bX2Z1          = floatval($bX2Z1);
+        $bX2Z2          = floatval($bX2Z2);
+        $bZ1Y           = floatval($bZ1Y);
+        $bZ2Y           = floatval($bZ2Y);
+        $bias           = floatval($bias);
+        $suhu           = floatval($suhu);
+        $kelembapan     = floatval($kelembapan);
+        $target         = floatval($suhu + $kelembapan);
+        $data = array(
+            'bX1Z1'          => $bX1Z1,
+            'bX1Z2'          => $bX1Z2,
+            'bX2Z1'          => $bX2Z1,
+            'bX2Z2'          => $bX2Z2,
+            'bZ1Y'           => $bZ1Y,
+            'bZ2Y'           => $bZ2Y,
+            'bias'           => $bias,
+            'suhu'           => $suhu,
+            'kelembapan'     => $kelembapan,
+            'target'         => $target
+        );
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+
+        $datanormalTemp = 0.8 * (($suhu - $dataminTemp)/($datamaxTemp - $dataminTemp)) + 0.1;
+        $datanormalHum = 0.8 * (($kelembapan - $dataminHum)/($datamaxHum - $dataminHum)) + 0.1;
+        $datanormalTarget = 1 - (0.8 * (($target - $dataminTarget)/($datamaxTarget - $dataminTarget)) + 0.1);
+        // echo "<pre> Normalisasi : ";
+        // echo $datanormalHum. " ". $datanormalTemp. " ". $datanormalTarget;
+        // echo "</pre>";
 
         #####langkah 1#####
         // lakukan langkah 2-4
@@ -565,8 +595,8 @@ class PerhitunganController extends Controller
                 // DB::table('data_normalisasi_testing')->insert(array('entry_id' =>$data->entry_id, 'humidity' => $data->humidity, 'temperature' =>$data->temperature, 'humidity_N'=>0, 'temperature_N'=>0,));
                 # code...
                 // menjumlahkan bobot input layer ke hidden layer
-                $Z_inZ1  = $bias + (($suhu * $bX1Z1) + ($kelembapan * $bX2Z1));
-                $Z_inZ2  = $bias + (($suhu * $bX1Z2) + ($kelembapan * $bX2Z2));
+                $Z_inZ1  = $bias + (($datanormalTemp * $bX1Z1) + ($datanormalHum * $bX2Z1));
+                $Z_inZ2  = $bias + (($datanormalTemp * $bX1Z2) + ($datanormalHum * $bX2Z2));
                 // $Z_inZ1  = $bias + (($data->humidity_N * $bX1Z1) + ($data->temperature_N * $bX2Z1));
                 // $Z_inZ2  = $bias + (($data->humidity_N * $bX1Z2) + ($data->temperature_N * $bX2Z2));
                 
@@ -580,23 +610,28 @@ class PerhitunganController extends Controller
                 
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
+                $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) +1;
                 
-                // return $Y;
-                echo "<pre> EntryId : ";
-                echo $data->entry_id. "\n\n\n\n";
-                echo $Z_inZ1 . "\n\n\n";
-                echo $Z_inZ2 . "\n\n\n";
-                echo $Z1 . "\n\n\n";
-                echo $Z2 . "\n\n\n";
-                echo "</pre>";
+                // // return $Y;
+                // echo "<pre>";
+                // // echo $data->entry_id. "\n\n\n\n";
+                // echo $Z_inZ1 . "\n\n\n";
+                // echo $Z_inZ2 . "\n\n\n";
+                // echo $Z1 . "\n\n\n";
+                // echo $Z2 . "\n\n\n";
+                // echo "</pre>";
                 
-                echo "<pre>Y_inY : ";
-                echo $Y_inY . "\n\n\n";
-                echo "</pre>";
+                // echo "<pre>Y_inY : ";
+                // echo $Y_inY . "\n\n\n";
+                // echo "</pre>";
         
-                echo "<pre> Y : ";
-                echo $Y . "\n\n\n";
-                echo "</pre>";
+                // echo "<pre> Y : ";
+                // echo $Y . "\n\n\n";
+                // echo $hasil_akhir;
+                // echo "</pre>";
+
+                // return response()->json(['hasil' => $Y, 'hasil_akhir' => $hasil_akhir]);
+                echo json_encode($hasil=['hasil' => $Y, 'hasil_akhir' => $hasil_akhir, 'target' => $target]);
             // }
         // }
     }

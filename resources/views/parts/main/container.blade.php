@@ -14,14 +14,24 @@
                                         <span class="pcoded-mtext">Dashboard</span>
                                     </a>
                                 </li>
-                                @if (Request::segment(1) == "data")
-                                <li class="{{ Request::is('data') ? 'active' : 'active' }}">
+                                @if (Request::segment(1) == "data-training")
+                                <li class="{{ Request::is('data-training') ? 'active' : 'active' }}">
                                     @else
                                 <li class="">
                                     @endif
-                                    <a href="/data">
+                                    <a href="/data-training">
                                         <span class="pcoded-micon"><i class="feather icon-server"></i></span>
                                         <span class="pcoded-mtext">Data Training</span>
+                                    </a>
+                                </li>
+                                @if (Request::segment(1) == "data-testing")
+                                <li class="{{ Request::is('data-testing') ? 'active' : 'active' }}">
+                                    @else
+                                <li class="">
+                                    @endif
+                                    <a href="/data-testing">
+                                        <span class="pcoded-micon"><i class="feather icon-server"></i></span>
+                                        <span class="pcoded-mtext">Data Testing</span>
                                     </a>
                                 </li>
                                 @if (Request::segment(1) == "pengujian")
