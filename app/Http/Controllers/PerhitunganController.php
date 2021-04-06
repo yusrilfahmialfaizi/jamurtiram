@@ -610,7 +610,7 @@ class PerhitunganController extends Controller
                 
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
-                $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) +1;
+                $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
                 
                 // // return $Y;
                 // echo "<pre>";
@@ -634,5 +634,14 @@ class PerhitunganController extends Controller
                 echo json_encode($hasil=['hasil' => $Y, 'hasil_akhir' => $hasil_akhir, 'target' => $target]);
             // }
         // }
+    }
+
+    function mape(){
+        $target = 0;
+        $output = 0;
+        $n      = 0;
+
+        $mape   = ((abs(($target-$output)/$target))/ $n) * 100 ;
+
     }
 }
