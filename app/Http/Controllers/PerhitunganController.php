@@ -18,24 +18,39 @@ class PerhitunganController extends Controller
         $data_Norm  = DB::table('data_training')->get();
         // return view('contents/coba', ['dataset' => $dataset]);
         #####pengujian di epoch alpha dan bias yang paling optimal#####
+
         $numEpoch           = $request->input("epoch");
         $alpha              = $request->input("learning_rate");
         $suhu               = $request->input("suhu");
         $kelembapan         = $request->input("kelembapan");
         $thresh             = $request->input("error");
         $count              = DB::table("data_training")->count();
-        // echo "<pre>";
-        // print_r($numEpoch.$alpha.$suhu.$kelembapan.$thresh);
-        // // print_r($request->input('name', 'epoch'));
-        // echo "</pre>";
-        // $numEpoch   = 1000;
-        // $alpha      = 0.1;
-        // $thresh     = 0.0001;
-        $Error      = 0.0;
-        // $bias       = 1;
-        $beta       = round(0.7 * sqrt(3), 2);
-        $bias       = rand(-$beta * 100, $beta * 100)/100;
+        $niu                = 0.5;
 
+        $Error      = 0.0;
+        
+        $beta       = round(0.7 * sqrt(3), 2);
+        
+        $bX0Z1      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z1
+        $bX0Z2      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z2
+        $bX0Z3      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z3
+
+        $bX0Z1tmin1 = 0; 
+        $bX0Z2tmin1 = 0; 
+        $bX0Z3tmin1 = 0;
+        
+        $bX1Z1tmin1 = 0; 
+        $bX1Z2tmin1 = 0; 
+        $bX1Z3tmin1 = 0;
+        
+        $bX2Z1tmin1 = 0; 
+        $bX2Z2tmin1 = 0; 
+        $bX2Z3tmin1 = 0;
+
+        $bZ0Ytmin1  = 0;
+        $bZ1Ytmin1  = 0;
+        $bZ2Ytmin1  = 0;
+        $bZ3Ytmin1  = 0;
 
         // echo $beta*100 . "\n";
         // echo $bias."\n";
@@ -48,162 +63,79 @@ class PerhitunganController extends Controller
         $bX2Z1      = rand(-5, 5) / 10;
         $bX2Z2      = rand(-5, 5) / 10;
         $bX2Z3      = rand(-5, 5) / 10;
-        
-        // $bX3Z1      = rand(-5, 5) / 10; //(-5, 5)
-        // $bX3Z2      = rand(-5, 5) / 10;
-        // $bX3Z3      = rand(-5, 5) / 10;
 
+
+        $bZ0Y       = rand(-$beta * 100, $beta * 100)/100; // bobot bias to Y
 
         $bZ1Y       = rand(-5, 5) / 10;
         $bZ2Y       = rand(-5, 5) / 10;
         $bZ3Y       = rand(-5, 5) / 10;
 
-        // echo "<pre>";
-        // echo $bX1Z1."\n\n\n";
-        // echo $bX1Z2."\n\n\n";
-        // echo $bX1Z3."\n\n\n";
-        // echo $bX2Z1."\n\n\n";
-        // echo $bX2Z2."\n\n\n";
-        // echo $bX2Z3."\n\n\n";
-        // echo $bX3Z1."\n\n\n";
-        // echo $bX3Z2."\n\n\n";
-        // echo $bX3Z3."\n\n\n";
-        // echo "</pre>";
         
         $V1         = round(sqrt((pow($bX1Z1,2) + pow($bX1Z2,2))),2);
         $V2         = round(sqrt((pow($bX2Z1,2) + pow($bX2Z2,2))),2);
         $V3         = round(sqrt((pow($bX1Z3,2) + pow($bX2Z3,2))),2);
 
-        // echo "<pre>";
-        // echo "v1 : ". $V1 ."\n\n\n";
-        // echo "v2 : ". $V2 ."\n\n\n";
-        // echo "v3 : ". $V3 ."\n\n\n";
-        // echo $beta;
-        // echo "</pre>";
 
         $bX1Z1 = round(($beta*$bX1Z1)/$V1, 2);
         $bX2Z1 = round(($beta*$bX2Z1)/$V1, 2);
-        // $bX3Z1 = round(($beta*$bX3Z1)/$V1, 2);
 
         $bX1Z2 = round(($beta*$bX1Z2)/$V2, 2);
         $bX2Z2 = round(($beta*$bX1Z2)/$V2, 2);
-        // $bX3Z2 = round(($beta*$bX1Z2)/$V2, 2);
 
         $bX1Z3 = round(($beta*$bX1Z3)/$V3, 2);
         $bX2Z3 = round(($beta*$bX1Z3)/$V3, 2);
-        // $bX3Z3 = round(($beta*$bX1Z2)/$V3, 2);
 
-        // echo $bX1Z1."\n\n\n";
-        // echo $bX1Z2."\n\n\n";
-        // echo $bX1Z3."\n\n\n"." ";
-
-        // echo $bX2Z1."\n\n\n";
-        // echo $bX2Z2."\n\n\n";
-        // echo $bX2Z3."\n\n\n"." ";
-
-        // echo $bX3Z1."\n\n\n";
-        // echo $bX3Z2."\n\n\n";
-        // echo $bX3Z3."\n\n\n"." ";
-
-        
-        $no = 0;
-        $i=1;
-        for ($i=1; $i <= $numEpoch ; $i++) { 
-            $epochke = $i;
+        for ($i=1; $i <= $numEpoch ; $i++) {
             
-            $no++;
-            // echo "<pre>";
-            // echo "Epoh : ".$i."\n\n";
-            // echo "Error : ". $Error."\n\n";
-            // echo "</pre>";
-
             foreach ($data_Norm as $dt_N) {
-                # code...
-                // echo "\n\n\n ID : ".$dt_N->entry_id;
 
                 #####langkah 4#####
-                // menjumlahkan bobot sinyal input ke hidden layer
-                // echo "<pre>";
-                // // echo "Z_inZ1  = ".$bias." + ((".$dt_N->humidity_N." * ".$bX1Z1.") + (".$dt_N->temperature_N." * ".$bX2Z1."))";
-                // echo "</pre>";
-                $Z_inZ1  = $bias + (($dt_N->humidity_N * $bX1Z1) + ($dt_N->temperature_N * $bX2Z1));
-                // echo "<pre>";
-                // // echo "Z_inZ2  = ".$bias." + ((".$dt_N->humidity_N." * ".$bX1Z2.") + (".$dt_N->temperature_N." * ".$bX2Z2."))";
-                // echo "</pre>";
-                $Z_inZ2  = $bias + (($dt_N->humidity_N * $bX1Z2) + ($dt_N->temperature_N * $bX2Z2));
 
-                $Z_inZ3  = $bias + (($dt_N->humidity_N * $bX1Z3) + ($dt_N->temperature_N * $bX2Z3));
-                // echo "<pre> Z_inZ1 : ";
-                // echo $Z_inZ1 . "\n\n\n Z_inZ2 : ";
-                // echo $Z_inZ2 . "\n\n\n";
-                // echo "</pre>";
+                // menjumlahkan bobot sinyal input ke hidden layer
+
+                $Z_inZ1  = $bX0Z1 + (($dt_N->humidity_N * $bX1Z1) + ($dt_N->temperature_N * $bX2Z1));
+                $Z_inZ2  = $bX0Z2 + (($dt_N->humidity_N * $bX1Z2) + ($dt_N->temperature_N * $bX2Z2));
+                $Z_inZ3  = $bX0Z3 + (($dt_N->humidity_N * $bX1Z3) + ($dt_N->temperature_N * $bX2Z3));
 
                 //menghitung aktifasi input ke hidden layer
+
                 $Z1     = 1 / (1 + exp(-$Z_inZ1));
                 $Z2     = 1 / (1 + exp(-$Z_inZ2));
                 $Z3     = 1 / (1 + exp(-$Z_inZ3));
-                // echo "<pre> Z1 : ";
-                // echo $Z1 . "\n\n\n Z2 : ";
-                // echo $Z2 . "\n\n\n";
-                // echo "</pre>";
 
                 #####langkah 5#####
+
                 // menjumlahkan bobot sinyal hidden layer ke output
-                $Y_inY   = $bias + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y) + ($Z3 * $bZ3Y));
-                // echo "Y_inY   = bias : ". $bias. " + (( Z1 : ".$Z1." * bZ1Y".$bZ1Y.") + (".$Z2." * ".$bZ2Y."))";
-                // echo "<pre>Y_inY : ";
-                // echo $Y_inY . "\n\n\n";
-                // echo "</pre>";
+
+                $Y_inY   = $bZ0Y + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y) + ($Z3 * $bZ3Y));
 
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
-                // echo "<pre> Y : ";
-                // echo $Y . "\n\n\n";
-                // echo "</pre>";
 
                 #####langkah 6#####
                 // menghitung informasi error output
-                // echo "tau    = (".$dt_N->target_N ."-". $Y.") * ".$Y ."* (1 - ". $Y.")";
-                // $mse    = pow(($Y - $dt_N->target_N),2);
-                
                 $tau    = ($dt_N->target_N - $Y) * $Y * (1 - $Y);
-                // echo "<pre> MSE : ";
-                // // echo "<pre> Tau : ";
-                // // echo $tau . "\n\n\n";
-                // echo $mse . "\n\n\n";
-                // echo "</pre>";
 
                 // menghitung bobot baru
                 $deltaWZ1     = $alpha * $tau * $Z1;
                 $deltaWZ2     = $alpha * $tau * $Z2;
                 $deltaWZ3     = $alpha * $tau * $Z3;
-                // echo "<pre> Bobot Baru WZ1 : ";
-                // echo $deltaWZ1 . "\n\n\n Bobot Baru WZ2 : ";
-                // echo $deltaWZ2 . "\n\n\n";
-                // echo "</pre>";
 
                 // menghitung koreksi bobot bias
                 $deltaW0 = $alpha * $tau;
-                // echo "delta W0 : ".$deltaW0;
 
                 #####langkah 7#####
+                
                 // menghitung penjumlahan kesalahan dari hidden
                 $tau_in1    = $tau * $bZ1Y;
                 $tau_in2    = $tau * $bZ2Y;
                 $tau_in3    = $tau * $bZ3Y;
-                // echo "<pre> Tau_in1 : ";
-                // echo $tau_in1 . "\n\n\n Tau_in2 : ";
-                // echo $tau_in2 . "\n\n\n";
-                // echo "</pre>";
 
                 // menghitung aktifasi kesalahan dari hidden
                 $tau1   = $tau_in1 * $Z1 * (1 - $Z1);
                 $tau2   = $tau_in2 * $Z2 * (1 - $Z2);
                 $tau3   = $tau_in3 * $Z3 * (1 - $Z3);
-                // echo "<pre> Aktifasi Tau1 : ";
-                // echo $tau1 . "\n\n\n Aktifasi Tau2 : ";
-                // echo $tau2 . "\n\n\n";
-                // echo "</pre>";
 
                 // menghitung koreksi bobotnya untuk memperbaharui bobot hidden ke output dengan learning rate / a =  o,1
                 $deltaVx1Z1 = round($alpha * $tau1 * $dt_N->humidity_N,10);
@@ -213,25 +145,31 @@ class PerhitunganController extends Controller
                 $deltaVx2Z1 = round($alpha * $tau1 * $dt_N->temperature_N,10);
                 $deltaVx2Z2 = round($alpha * $tau2 * $dt_N->temperature_N,10);
                 $deltaVx2Z3 = round($alpha * $tau3 * $dt_N->temperature_N,10);
-                // echo "<pre> DeltaVx1Z1 : ";
-                // echo $deltaVx1Z1 . "\n\n\n DeltaVx1Z2 : ";
-                // echo $deltaVx1Z2 . "\n\n\n DeltaVx2Z1 : ";
-                // echo $deltaVx2Z1 . "\n\n\n DeltaVx2Z2 : ";
-                // echo $deltaVx2Z2 . "\n\n\n";
-                // echo "</pre>";
+
+
+
+                #### Langkah 8 ####
+                
+                ####tanpa momentum ####
                 
                 // menghitung pembaruan bobot hidden ke output
-                // echo "bZ1Y = ".$bZ1Y." + ".$deltaWZ1;
-                $bZ1Y = $bZ1Y + $deltaWZ1;
-                // echo "bZ2Y = ".$bZ2Y." + ".$deltaWZ2;
-                $bZ2Y = $bZ2Y + $deltaWZ2;
-                $bZ3Y = $bZ3Y + $deltaWZ3;
-                // echo "<pre> bobot baru Z1Y : ";
-                // echo $bZ1Y . "\n\n\n bobot baru Z2Y : ";
-                // echo $bZ2Y . "\n\n\n";
-                // echo "</pre>";
+                // $bZ0Y = $bZ1Y + $deltaW0; //perhitungan
+                // $bZ1Y = $bZ1Y + $deltaWZ1; //perhitungan
+                // $bZ2Y = $bZ2Y + $deltaWZ2; //perhitungan
+                // $bZ3Y = $bZ3Y + $deltaWZ3; //perhitungan
+
+                ####dengan momentum#######
+
+                // Wkj(t+1) = wjk(t) + alpaha.tau.zj + niu(wkj(t) - wkj(t-1))
+                $bZ0Y = $bZ0Y + $deltaW0  + $niu * ($bZ0Y - $bZ0Ytmin1); 
+                $bZ1Y = $bZ1Y + $deltaWZ1 + $niu * ($bZ1Y - $bZ1Ytmin1); 
+                $bZ2Y = $bZ2Y + $deltaWZ2 + $niu * ($bZ2Y - $bZ2Ytmin1); 
+                $bZ3Y = $bZ3Y + $deltaWZ3 + $niu * ($bZ3Y - $bZ3Ytmin1); 
 
                 // menghitung pembaruan bobot input ke hidden
+
+                ##### Tanpa Moementum #####
+
                 $bX1Z1 = $bX1Z1 + $deltaVx1Z1;
                 $bX1Z2 = $bX1Z2 + $deltaVx1Z2;
                 $bX1Z3 = $bX1Z3 + $deltaVx1Z3;
@@ -240,97 +178,70 @@ class PerhitunganController extends Controller
                 $bX2Z2 = $bX2Z2 + $deltaVx2Z2;
                 $bX2Z3 = $bX2Z3 + $deltaVx2Z3;
 
-                $bias  = $bias + $deltaW0;
-                // echo "<pre> bobot baru x1z1 : ";
-                // echo $bX1Z1."\n\n bobot baru x1z2 : ";
-                // echo $bX1Z2."\n\n bobot baru x2z1 : ";
-                // echo $bX2Z1."\n\n bobot baru x2z2 : ";
-                // echo $bX2Z2."\n\n bias baru : ";
-                // echo $bias."\n\n\n";
-                // echo "</pre>";
+                $bX0Z1  = $bX0Z1 + $deltaW0;
+                $bX0Z2  = $bX0Z2 + $deltaW0;
+                $bX0Z3  = $bX0Z3 + $deltaW0;
+
+
+
+                ####Dengan Momentum ####
+
+                $bX1Z1 = $bX1Z1 + $deltaVx1Z1 + $niu * ($bX1Z1 - $bX1Z1tmin1);
+                $bX1Z2 = $bX1Z2 + $deltaVx1Z2 + $niu * ($bX1Z2 - $bX1Z2tmin1);
+                $bX1Z3 = $bX1Z3 + $deltaVx1Z3 + $niu * ($bX1Z3 - $bX1Z3tmin1);
+
+                $bX2Z1 = $bX2Z1 + $deltaVx2Z1 + $niu * ($bX2Z1 - $bX2Z1tmin1);
+                $bX2Z2 = $bX2Z2 + $deltaVx2Z2 + $niu * ($bX2Z2 - $bX2Z2tmin1);
+                $bX2Z3 = $bX2Z3 + $deltaVx2Z3 + $niu * ($bX2Z3 - $bX2Z3tmin1);
+
+                $bX0Z1 = $bX0Z1 + $deltaW0 + $niu * ($bX0Z1 - $bX0Z1tmin1);
+                $bX0Z2 = $bX0Z2 + $deltaW0 + $niu * ($bX0Z2 - $bX0Z2tmin1);
+                $bX0Z3 = $bX0Z3 + $deltaW0 + $niu * ($bX0Z3 - $bX0Z3tmin1);
+
+                $bX0Z1tmin1 = $bX0Z1; 
+                $bX0Z2tmin1 = $bX0Z2; 
+                $bX0Z3tmin1 = $bX0Z3;
                 
+                $bX1Z1tmin1 = $bX1Z1; 
+                $bX1Z2tmin1 = $bX1Z2; 
+                $bX1Z3tmin1 = $bX1Z3;
+                
+                $bX2Z1tmin1 = $bX2Z1; 
+                $bX2Z2tmin1 = $bX2Z2; 
+                $bX2Z3tmin1 = $bX2Z3;
+
+                $bZ0Ytmin1  = $bZ0Y;
+                $bZ1Ytmin1  = $bZ1Y;
+                $bZ2Ytmin1  = $bZ2Y;
+                $bZ3Ytmin1  = $bZ3Y;
+
+                // $bias  = $bias + $deltaW0;
+
                 #####langkah 9#####
+
                 // tes kondisi berhenti
+
                 // Error < Error maksimum
-                // $Error = 0.5 * pow($dt_N->target_N - $Y,2); 
+                // $Error = 0.5 * pow($dt_N->target_N - $Y,2); // error kuadratis
                 $Error = (pow(($dt_N->target_N - $Y),2)) / $count; //MSE
-                // echo "<pre>";
-                // echo "Error : ". $Error."\n\n";
-                // echo "</pre>";
-                // if ($i == 1000) {
-                    // if ($Error < $thresh) {
                 if ($Error < $thresh) {
-                            //     # code...
-                            // $Error = 20;
-                            
-                            break;
-                            $epochke = $i;
+                    break;
+                    $epochke = $i;
                             
                 }
-                // if ($i >= 990) {
-                //     # code...
-                //     if ($dt_N->entry_id ==1) {
-                //         # code...
-                //         echo "Iterasi :".$i."\n\n\n ID : ".$dt_N->entry_id;
-                //         echo "<pre> Y : ";
-                //         echo $Y ." = ". round($Y, 4) . "\n\n\n";
-                //         echo "Target : ";
-                //         echo $dt_N->target_N. " = ". round($dt_N->target_N, 4)."\n\n\n";
-                //         echo "</pre>";
-                //         echo "<pre> MSE : ";
-                //         echo $mse ." = ". round($mse, 4). "\n\n\n";
-                //         echo "</pre>";
-                //     }
-                // }
+
             }
             if ($Error < $thresh){
                 break;
             }
-            // echo "<pre>";
-            // echo "EPOCH ke : ". $epochke;
-            // echo "</pre>";
+        
         }
+        $this->testing($bX1Z1, $bX1Z2, $bX1Z3, $bX2Z1, $bX2Z2, $bX2Z3, $bX0Z1, $bX0Z2, $bX0Z3, $bZ0Y, $bZ1Y, $bZ2Y, $bZ3Y, $suhu, $kelembapan);
 
-        // }
-        // echo "<pre> bobot baru x1z1 : ";
-        // echo $bX1Z1."\n\n bobot baru x1z2 : ";
-        // echo $bX1Z2."\n\n bobot baru x2z1 : ";
-        // echo $bX2Z1."\n\n bobot baru x2z2 : ";
-        // echo $bX2Z2."\n\n bias baru : ";
-        // echo $bias."\n\n\n";
-        // echo "</pre>";
-        $this->testing($bX1Z1, $bX1Z2, $bX2Z1, $bX2Z2, $bias, $bZ1Y, $bZ2Y, $suhu, $kelembapan);
-        // echo "<pre> bobot baru x1z1 : ";
-        // echo $bX1Z1."\n\n bobot baru x1z2 : ";
-        // echo $bX1Z2."\n\n bobot baru x2z1 : ";
-        // echo $bX2Z1."\n\n bobot baru x2z2 : ";
-        // echo $bX2Z2."\n\n bias baru : ";
-        // echo $bias."\n\n\n";
-        // echo "</pre>";
-        // foreach ($dataset as $dt_N) {
-        //     # code...
-        //     // menjumlahkan bobot input layer ke hidden layer
-        //     $Z_inZ1  = $bias + (($dt_N->humidity_N * $bX1Z1) + ($dt_N->temperature_N * $bX2Z1));
-        //     $Z_inZ2  = $bias + (($dt_N->humidity_N * $bX1Z2) + ($dt_N->temperature_N * $bX2Z2));
 
-        //     //menghitung aktifasi input ke hidden layer
-        //     $Z1     = 1 / (1 + exp(-$Z_inZ1));
-        //     $Z2     = 1 / (1 + exp(-$Z_inZ2));
-
-        //     // menjumlahkan bobot sinyal hidden layer ke output
-        //     $Y_inY   = $bias + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y));
-        //     // echo "Y_inY   = bias : ". $bias. " + (( Z1 : ".$Z1." * bZ1Y".$bZ1Y.") + (".$Z2." * ".$bZ2Y."))";
-        //     echo "<pre>Y_inY : ";
-        //     echo $Y_inY . "\n\n\n";
-        //     echo "</pre>";
-
-        //     // menghitung aktifasi hidden layer ke output
-        //     $Y      = 1 / (1 + exp(-$Y_inY));
-        //     echo "<pre> Y : ";
-        //     echo $Y . "\n\n\n";
-        //     echo "</pre>";
-        // }
     }
+
+    
 
     function normalisasi(){
         foreach ($dataset as $dtN) {
@@ -467,7 +378,7 @@ class PerhitunganController extends Controller
         
     }
 
-    function testing($bX1Z1, $bX1Z2, $bX2Z1, $bX2Z2, $bias, $bZ1Y, $bZ2Y, $suhu, $kelembapan){
+    function testing($bX1Z1, $bX1Z2, $bX1Z3, $bX2Z1, $bX2Z2, $bX2Z3, $bX0Z1, $bX0Z2, $bX0Z3, $bZ0Y, $bZ1Y, $bZ2Y, $bZ3Y, $suhu, $kelembapan){
     // public function testing(){
 
         $dataset    = DB::table('data_testing')->get();
@@ -551,27 +462,16 @@ class PerhitunganController extends Controller
         $bX1Z2          = floatval($bX1Z2);
         $bX2Z1          = floatval($bX2Z1);
         $bX2Z2          = floatval($bX2Z2);
+        $bX0Z1          = floatval($bX0Z1);
+        $bX0Z2          = floatval($bX0Z2);
+        $bX0Z3          = floatval($bX0Z3);
+        $bZ0Y           = floatval($bZ0Y);
         $bZ1Y           = floatval($bZ1Y);
         $bZ2Y           = floatval($bZ2Y);
-        $bias           = floatval($bias);
+        $bZ3Y           = floatval($bZ3Y);
         $suhu           = floatval($suhu);
         $kelembapan     = floatval($kelembapan);
         $target         = floatval($suhu + $kelembapan);
-        $data = array(
-            'bX1Z1'          => $bX1Z1,
-            'bX1Z2'          => $bX1Z2,
-            'bX2Z1'          => $bX2Z1,
-            'bX2Z2'          => $bX2Z2,
-            'bZ1Y'           => $bZ1Y,
-            'bZ2Y'           => $bZ2Y,
-            'bias'           => $bias,
-            'suhu'           => $suhu,
-            'kelembapan'     => $kelembapan,
-            'target'         => $target
-        );
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
 
         $datanormalTemp = 0.8 * (($suhu - $dataminTemp)/($datamaxTemp - $dataminTemp)) + 0.1;
         $datanormalHum = 0.8 * (($kelembapan - $dataminHum)/($datamaxHum - $dataminHum)) + 0.1;
@@ -595,17 +495,19 @@ class PerhitunganController extends Controller
                 // DB::table('data_normalisasi_testing')->insert(array('entry_id' =>$data->entry_id, 'humidity' => $data->humidity, 'temperature' =>$data->temperature, 'humidity_N'=>0, 'temperature_N'=>0,));
                 # code...
                 // menjumlahkan bobot input layer ke hidden layer
-                $Z_inZ1  = $bias + (($datanormalTemp * $bX1Z1) + ($datanormalHum * $bX2Z1));
-                $Z_inZ2  = $bias + (($datanormalTemp * $bX1Z2) + ($datanormalHum * $bX2Z2));
+                $Z_inZ1  = $bX0Z1 + (($datanormalTemp * $bX1Z1) + ($datanormalHum * $bX2Z1));
+                $Z_inZ2  = $bX0Z2 + (($datanormalTemp * $bX1Z2) + ($datanormalHum * $bX2Z2));
+                $Z_inZ3  = $bX0Z3 + (($datanormalTemp * $bX1Z3) + ($datanormalHum * $bX2Z3));
                 // $Z_inZ1  = $bias + (($data->humidity_N * $bX1Z1) + ($data->temperature_N * $bX2Z1));
                 // $Z_inZ2  = $bias + (($data->humidity_N * $bX1Z2) + ($data->temperature_N * $bX2Z2));
                 
                 //menghitung aktifasi input ke hidden layer
                 $Z1     = 1 / (1 + exp(-$Z_inZ1));
                 $Z2     = 1 / (1 + exp(-$Z_inZ2));
+                $Z3     = 1 / (1 + exp(-$Z_inZ3));
                 
                 // menjumlahkan bobot sinyal hidden layer ke output
-                $Y_inY   = $bias + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y));
+                $Y_inY   = $bZ0Y + (($Z1 * $bZ1Y) + ($Z2 * $bZ2Y) + ($Z3 * $bZ3Y));
                 // echo "Y_inY   = bias : ". $bias. " + (( Z1 : ".$Z1." * bZ1Y".$bZ1Y.") + (".$Z2." * ".$bZ2Y."))";
                 
                 // menghitung aktifasi hidden layer ke output
