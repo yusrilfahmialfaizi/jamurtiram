@@ -10,7 +10,7 @@
                                 <li class="">
                                     @endif
                                     <a href="/dashboard">
-                                        <span class="pcoded-micon"><i class="feather icon-home"></i></span>
+                                        <span class="pcoded-micon"><i class="feather icon-activity"></i></span>
                                         <span class="pcoded-mtext">Dashboard</span>
                                     </a>
                                 </li>
@@ -20,7 +20,7 @@
                                 <li class="">
                                     @endif
                                     <a href="/data-training">
-                                        <span class="pcoded-micon"><i class="feather icon-server"></i></span>
+                                        <span class="pcoded-micon"><i class="feather icon-folder"></i></span>
                                         <span class="pcoded-mtext">Data Training</span>
                                     </a>
                                 </li>
@@ -40,8 +40,18 @@
                                 <li class="">
                                     @endif
                                     <a href="/pengujian">
-                                        <span class="pcoded-micon"><i class="feather icon-sliders"></i></span>
+                                        <span class="pcoded-micon"><i class="feather icon-cpu"></i></span>
                                         <span class="pcoded-mtext">Pengujian</span>
+                                    </a>
+                                </li>
+                                @if (Request::segment(1) == "kontrol")
+                                <li class="{{ Request::is('kontrol') ? 'active' : 'active' }}">
+                                    @else
+                                <li class="">
+                                    @endif
+                                    <a href="/kontrol">
+                                        <span class="pcoded-micon"><i class="feather icon-thermometer"></i></span>
+                                        <span class="pcoded-mtext">Kontrol</span>
                                     </a>
                                 </li>
                             </ul>

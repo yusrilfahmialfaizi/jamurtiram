@@ -26,6 +26,9 @@
 <!-- Morris Chart js -->
 <script src="{{asset('assets\bower_components\raphael\js\raphael.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\morris.js\js\morris.js')}}"></script>
+<!-- Chartlist charts -->
+<script src=".{{asset('assets\bower_components\chartist\js\chartist.js')}}"></script>
+<script src=".{{asset('assets\assets\pages\chart\chartlist\js\chartist-plugin-threshold.js')}}"></script>
 <!-- Float Chart js -->
 <script src="{{asset('assets\assets\pages\chart\float\jquery.flot.js')}}"></script>
 <script src="{{asset('assets\assets\pages\chart\float\jquery.flot.categories.js')}}"></script>
@@ -52,6 +55,7 @@
 <script type="text/javascript" src="{{asset('assets\bower_components\jquery-i18next\js\jquery-i18next.min.js')}}">
 </script>
 <!-- Custom js -->
+<script type="text/javascript" src="{{asset('assets\assets\pages\chart\chartlist\chartlist-custom.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\pages\widget\custom-widget1.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\js\SmoothScroll.js')}}"></script>
 <script src="{{asset('assets\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
