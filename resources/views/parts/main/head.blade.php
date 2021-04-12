@@ -30,6 +30,10 @@
         href="{{asset('assets\assets\pages\data-table\css\buttons.dataTables.min.css')}}">
     <link rel="stylesheet" type="text/css"
         href="{{asset('assets\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css')}}">
+    <!-- Chartlist chart css -->
+    <link rel="stylesheet" href="{{asset('assets\bower_components\chartist\css\chartist.css')}}" type="text/css" 
+    media="all">
+    
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\jquery.mCustomScrollbar.css')}}">

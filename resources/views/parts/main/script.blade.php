@@ -9,7 +9,7 @@
 </script>
 <!-- modernizr js -->
 <script type="text/javascript" src="{{asset('assets\bower_components\modernizr\js\modernizr.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\bower_components\modernizr\js\css-scrollbars.js"></script>')}}
+<script type="text/javascript" src="{{asset('assets\bower_components\modernizr\js\css-scrollbars.js')}}"></script>
 <!-- Chart js -->
 <script type="text/javascript" src="{{asset('assets\bower_components\chart.js\js\Chart.js')}}"></script>
 <!-- amchart js -->
@@ -19,6 +19,17 @@
 <script src="{{asset('assets\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\js\SmoothScroll.js')}}"></script>
 <script src="{{asset('assets\assets\js\pcoded.min.js')}}"></script>
+
+<!-- Chartlist charts -->
+<script src="{{asset('assets\bower_components\chartist\js\chartist.js')}}"></script>
+<script src="{{asset('assets\assets\pages\chart\chartlist\js\chartist-plugin-threshold.js')}}"></script>
+<!-- Morris Chart js -->
+<script src="{{asset('assets\bower_components\raphael\js\raphael.min.js')}}"></script>
+<script src="{{asset('assets\bower_components\morris.js\js\morris.js')}}"></script>
+<!-- Float Chart js -->
+<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.js')}}"></script>
+<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.categories.js')}}"></script>
+<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.pie.js')}}"></script>
 <!-- data-table js -->
 <script src="{{asset('assets\bower_components\datatables.net\js\jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js')}}"></script>
@@ -29,13 +40,28 @@
 <script src="{{asset('assets\bower_components\datatables.net-buttons\js\buttons.html5.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js')}}">
+</script>
 <!-- i18next.min.js -->
 <script type="text/javascript" src="{{asset('assets\bower_components\i18next\js\i18next.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\bower_components\jquery-i18next\js\jquery-i18next.min.js')}}"></script>
+<script type="text/javascript"
+    src="{{asset('assets\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js')}}"></script>
+<script type="text/javascript"
+    src="{{asset('assets\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js')}}">
+</script>
+<script type="text/javascript" src="{{asset('assets\bower_components\jquery-i18next\js\jquery-i18next.min.js')}}">
+</script>
+<!-- Custom js -->
+    <script type="text/javascript" src=""{{asset('assets\files\assets\pages\widget\custom-widget1.js')}}"></script>
+    <script type="text/javascript" src=""{{asset('assets\files\assets\js\SmoothScroll.js')}}"></script>
+    <script src=""{{asset('assets\files\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
+    <script src=""{{asset('assets\files\assets\js\jquery.mousewheel.min.js')}}"></script>
+    <script src=""{{asset('assets\files\assets\js\pcoded.min.js')}}"></script>
+    <script src=""{{asset('assets\files\assets\js\vartical-layout.min.js')}}"></script>
+    <script type="text/javascript" src=""{{asset('assets\files\assets\js\script.js')}}"></script>
+
 <!-- custom js -->
+{{-- <script src="{{asset('assets\assets\pages\chart\morris\morris-custom-chart.js')}}"></script> --}}
 <script src="{{asset('assets\assets\pages\data-table\js\data-table-custom.js')}}"></script>
 <script src="{{asset('assets\assets\js\vartical-layout.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\pages\dashboard\custom-dashboard.js')}}"></script>
@@ -52,6 +78,7 @@
 
     gtag('config', 'UA-23581568-13');
 </script>
+
 {{-- <script>
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
