@@ -7,14 +7,58 @@
 
                 <div class="page-body">
                     <div class="row">
-                        <!-- LINE CHART start -->
-                        <div class="col-md-12 col-lg-12">
+                        <!-- ANGLE OFFSET AND ARC start -->
+                        <div class="col-lg-6 col-xl-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Kelembapan</h5>
+                                    <h5>KELEMBAPAN</h5>
+                                    <span></span>
+                                </div>
+                                <div class="card-block text-center">
+                                    <input type="text" class="dial" id="lembap" data-width="200" data-height="200"
+                                        data-fgcolor="#4ECDC4" data-angleoffset="-125" data-anglearc="250"
+                                        data-linecap="round" data-rotation="clockwise" data-readonly="true"
+                                        data-displayinput="false" />
+                                    <h2 style="color:#4ECDC4;" id="lembap_nilai"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>SUHU</h5>
+                                    <span></span>
+                                </div>
+                                <div class="card-block text-center">
+                                    <input type="any" class="dial" id="suhu" data-width="200" data-height="200"
+                                        data-fgcolor="#ff6347" data-angleoffset="-125" data-anglearc="250"
+                                        data-linecap="round" data-rotation="clockwise" data-readonly="true"
+                                        data-displayinput="false" />
+                                    <h2 style="color:Tomato;" id="suhu_nilai"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ANGLE OFFSET AND ARC Ends -->
+                        <!-- LINE CHART start -->
+                        <div class="col-md-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>DATA</h5>
                                 </div>
                                 <div class="card-block">
-                                    <div id="line-kelembapan"></div>
+                                    {{-- <div id="line-kelembapan"></div> --}}
+                                    <div id="chartHumidity" style="height: 250px; width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>DATA</h5>
+                                </div>
+                                <div class="card-block">
+                                    {{-- <div id="line-kelembapan"></div> --}}
+                                    <div id="chartTemp" style="height: 250px; width: 100%"></div>
                                 </div>
                             </div>
                         </div>
@@ -50,54 +94,23 @@
             appId: "1:420391507616:web:5c591251e33b470061dbc5",
             measurementId: "G-E6MV5SJJ4C"
         };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
 
-        // suhuChart(firebaseConfig);
-        kelembapanChart(firebaseConfig);
-
-        // // Initialize Firebase
-        // firebase.initializeApp(firebaseConfig);
-
-        // firebase.database().ref('dataset').on('value', (snap) => {
-        //     var totalRecord = snap.numChildren();
-
-
-        //     for (let x = 0; x < totalRecord; x++) {
-        //         firebase.database().ref('dataset/' + x + '/humidity').once('value', function (snapshot) {
-        //             snapshot.forEach(function (childSnapshot) {
-        //                 var childKey = childSnapshot.key; //this is id 
-        //                 var dbRef = firebase.database();
-        //                 var data = dbRef.ref().child("dataset/" + x + "/humidity/" + childKey);
-        //                 data.on('value', snap => console.log(snap.val()));
-        //             });
-        //         });
-        //         firebase.database().ref('dataset/' + x + '/temperature').once('value', function (snapshot) {
-        //             snapshot.forEach(function (childSnapshot) {
-        //                 var childKey = childSnapshot.key; //this is id 
-        //                 var dbRef = firebase.database();
-        //                 var data = dbRef.ref().child("dataset/" + x + "/temperature/" + childKey);
-        //                 data.on('value', snap => console.log(snap.val()));
-        //             });
-        //         });
-
-        //     }
-        // });
+        firebase.database().ref('temp').on('value', (snap) => {
+            console.log(snap.val());
+            document.getElementById("suhu_nilai").innerHTML = snap.val() + " &#8451";
+            $('#suhu').val(snap.val()).trigger('change');
+        });
+        firebase.database().ref('hum').on('value', (snap) => {
+            console.log(snap.val());
+            document.getElementById("lembap_nilai").innerHTML = snap.val() + " %";
+            $('#lembap').val(snap.val()).trigger('change');
+        });
 
         function kelembapanChart(firebaseConfig) {
 
             let dataset = [];
-
-            // var firebaseConfig = {
-            //     apiKey: "AIzaSyAfolJxQxt38Dj6sLFGVwFxUa5B2qALBuI",
-            //     authDomain: "jamurtiram-a1bc2.firebaseapp.com",
-            //     databaseURL: "https://jamurtiram-a1bc2-default-rtdb.firebaseio.com",
-            //     projectId: "jamurtiram-a1bc2",
-            //     storageBucket: "jamurtiram-a1bc2.appspot.com",
-            //     messagingSenderId: "420391507616",
-            //     appId: "1:420391507616:web:5c591251e33b470061dbc5",
-            //     measurementId: "G-E6MV5SJJ4C"
-            // };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
 
             firebase.database().ref('dataset').on('value', (snap) => {
                 var totalRecord = snap.numChildren();
@@ -106,7 +119,7 @@
                 var id
 
 
-                for (let x =  totalRecord - 5 ; x < totalRecord; x++) {
+                for (let x = totalRecord - 5; x < totalRecord; x++) {
                     id = x;
                     firebase.database().ref('dataset/' + x + '/humidity').once('value', function (
                         snapshot) {
@@ -147,23 +160,237 @@
                 });
             });
         }
+        window.onload = function () {
+            var dps1 = []; // dataPoints
+            var dps2 = []; // dataPoints
+            var chart1 = new CanvasJS.Chart("chartHumidity", {
+                title: {
+                    text: "Kelembapan",
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: dps1,
+                }, ],
+            });
+            var chart2 = new CanvasJS.Chart("chartTemp", {
+                title: {
+                    text: "Suhu",
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: dps2,
+                }, ],
+            });
+            var updateInterval = 5000;
+            var dataLength = 20; // number of dataPoints visible at any point
 
-        // function kelembapanChart(firebaseConfig) {
-        //     window.lineChart = Morris.Line({
-        //         element: "line-kelembapan",
+            var updateChart1 = function (count) {
+                count = count || 1;
+
+                //   for (var j = 0; j < count; j++) {
+
+                //     yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
+                //     dps.push({
+                //       x: xVal,
+                //       y: yVal,
+                //     });
+                //     xVal++;
+                //   }
+                firebase.database().ref('dataset').on('value', (snap) => {
+                    var totalRecord = snap.numChildren();
+                    var hum;
+                    var temp;
+                    var id
+
+
+                    for (let x = totalRecord - 5; x < totalRecord; x++) {
+                        id = x;
+                        firebase.database().ref('dataset/' + x + '/humidity').once('value',
+                            function (
+                                snapshot) {
+                                snapshot.forEach(function (childSnapshot) {
+                                    var childKey = childSnapshot.key; //this is id 
+                                    var dbRef = firebase.database();
+                                    var data = dbRef.ref().child("dataset/" + x +
+                                        "/humidity/" +
+                                        childKey);
+                                    data.on('value', snap => hum = snap.val());
+                                });
+                            });
+                        // firebase.database().ref('dataset/' + x + '/temperature').once('value',
+                        //     function (
+                        //         snapshot) {
+                        //         snapshot.forEach(function (childSnapshot) {
+                        //             var childKey = childSnapshot.key; //this is id 
+                        //             var dbRef = firebase.database();
+                        //             var data = dbRef.ref().child("dataset/" + x +
+                        //                 "/temperature/" + childKey);
+                        //             data.on('value', snap => temp = snap.val());
+                        //         });
+                        //     });
+                        dps1.push({
+                            x: id,
+                            y: hum,
+                        });
+                    }
+                });
+
+                if (dps1.length > dataLength) {
+                    dps1.shift();
+                }
+
+                chart1.render();
+            };
+
+            var updateChart2 = function (count) {
+                count = count || 1;
+
+                //   for (var j = 0; j < count; j++) {
+
+                //     yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
+                //     dps.push({
+                //       x: xVal,
+                //       y: yVal,
+                //     });
+                //     xVal++;
+                //   }
+                firebase.database().ref('dataset').on('value', (snap) => {
+                    var totalRecord = snap.numChildren();
+                    var hum;
+                    var temp;
+                    var id
+
+
+                    for (let x = totalRecord - 5; x < totalRecord; x++) {
+                        id = x;
+                        // firebase.database().ref('dataset/' + x + '/humidity').once('value',
+                        //     function (
+                        //         snapshot) {
+                        //         snapshot.forEach(function (childSnapshot) {
+                        //             var childKey = childSnapshot.key; //this is id 
+                        //             var dbRef = firebase.database();
+                        //             var data = dbRef.ref().child("dataset/" + x +
+                        //                 "/humidity/" +
+                        //                 childKey);
+                        //             data.on('value', snap => hum = snap.val());
+                        //         });
+                        //     });
+                        firebase.database().ref('dataset/' + x + '/temperature').once('value',
+                            function (
+                                snapshot) {
+                                snapshot.forEach(function (childSnapshot) {
+                                    var childKey = childSnapshot.key; //this is id 
+                                    var dbRef = firebase.database();
+                                    var data = dbRef.ref().child("dataset/" + x +
+                                        "/temperature/" + childKey);
+                                    data.on('value', snap => temp = snap.val());
+                                });
+                            });
+                        dps2.push({
+                            x: id,
+                            y: temp,
+                        });
+                    }
+                });
+
+                if (dps2.length > dataLength) {
+                    dps2.shift();
+                }
+
+                chart2.render();
+            };
+
+            updateChart1(dataLength);
+            setInterval(function () {
+                updateChart1();
+            }, updateInterval);
+
+            updateChart2(dataLength);
+            setInterval(function () {
+                updateChart2();
+            }, updateInterval);
+        };
+        // window.onload = function () {
+        //     var dps = []; // dataPoints
+        //     var chart = new CanvasJS.Chart("chartTemp", {
+        //         title: {
+        //             text: "Suhu",
+        //         },
         //         data: [{
-        //             y: "2006",
-        //             hum: 100,
-        //             temp: 90
-        //         }],
-        //         xkey: "y",
-        //         redraw: true,
-        //         ykeys: ["hum", "temp"],
-        //         hideHover: "auto",
-        //         labels: ["Kelembapan", "Suhu"],
-        //         lineColors: ["#B4C1D7", "#FF9F55"],
+        //             type: "line",
+        //             dataPoints: dps,
+        //         }, ],
         //     });
-        // }
+
+        //     var xVal = 0;
+        //     var yVal = 100;
+        //     var updateInterval = 1000;
+        //     var dataLength = 20; // number of dataPoints visible at any point
+
+        //     var updateChart = function (count) {
+        //         count = count || 1;
+
+        //         //   for (var j = 0; j < count; j++) {
+
+        //         //     yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
+        //         //     dps.push({
+        //         //       x: xVal,
+        //         //       y: yVal,
+        //         //     });
+        //         //     xVal++;
+        //         //   }
+        //         firebase.database().ref('dataset').on('value', (snap) => {
+        //             var totalRecord = snap.numChildren();
+        //             var hum;
+        //             var temp;
+        //             var id
+
+
+        //             for (let x = totalRecord - 5; x < totalRecord; x++) {
+        //                 id = x;
+        //                 // firebase.database().ref('dataset/' + x + '/humidity').once('value',
+        //                 //     function (
+        //                 //         snapshot) {
+        //                 //         snapshot.forEach(function (childSnapshot) {
+        //                 //             var childKey = childSnapshot.key; //this is id 
+        //                 //             var dbRef = firebase.database();
+        //                 //             var data = dbRef.ref().child("dataset/" + x +
+        //                 //                 "/humidity/" +
+        //                 //                 childKey);
+        //                 //             data.on('value', snap => hum = snap.val());
+        //                 //         });
+        //                 //     });
+        //                 firebase.database().ref('dataset/' + x + '/temperature').once('value',
+        //                     function (
+        //                         snapshot) {
+        //                         snapshot.forEach(function (childSnapshot) {
+        //                             var childKey = childSnapshot.key; //this is id 
+        //                             var dbRef = firebase.database();
+        //                             var data = dbRef.ref().child("dataset/" + x +
+        //                                 "/temperature/" + childKey);
+        //                             data.on('value', snap => temp = snap.val());
+        //                         });
+        //                     });
+        //                 dps.push({
+        //                     x: id,
+        //                     y: temp,
+        //                 });
+        //             }
+        //         });
+
+        //         if (dps.length > dataLength) {
+        //             dps.shift();
+        //         }
+
+        //         chart.render();
+        //     };
+
+        //     updateChart(dataLength);
+        //     setInterval(function () {
+        //         updateChart();
+        //     }, updateInterval);
+        // };
     })
 </script>
+
 @endsection

@@ -52,14 +52,19 @@
 <script type="text/javascript" src="{{asset('assets\bower_components\jquery-i18next\js\jquery-i18next.min.js')}}">
 </script>
 <!-- Custom js -->
-    <script type="text/javascript" src=""{{asset('assets\files\assets\pages\widget\custom-widget1.js')}}"></script>
-    <script type="text/javascript" src=""{{asset('assets\files\assets\js\SmoothScroll.js')}}"></script>
-    <script src=""{{asset('assets\files\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
-    <script src=""{{asset('assets\files\assets\js\jquery.mousewheel.min.js')}}"></script>
-    <script src=""{{asset('assets\files\assets\js\pcoded.min.js')}}"></script>
-    <script src=""{{asset('assets\files\assets\js\vartical-layout.min.js')}}"></script>
-    <script type="text/javascript" src=""{{asset('assets\files\assets\js\script.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\pages\widget\custom-widget1.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\js\SmoothScroll.js')}}"></script>
+<script src="{{asset('assets\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
+<script src="{{asset('assets\assets\js\jquery.mousewheel.min.js')}}"></script>
+<script src="{{asset('assets\assets\js\pcoded.min.js')}}"></script>
+<script src="{{asset('assets\assets\js\vartical-layout.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\js\script.js')}}"></script>
 
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<!-- knob js -->
+<script src="{{asset('assets\assets\pages\chart\knob\jquery.knob.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\pages\chart\knob\knob-custom-chart.js')}}"></script>
 <!-- custom js -->
 {{-- <script src="{{asset('assets\assets\pages\chart\morris\morris-custom-chart.js')}}"></script> --}}
 <script src="{{asset('assets\assets\pages\data-table\js\data-table-custom.js')}}"></script>
