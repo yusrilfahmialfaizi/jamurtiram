@@ -44,6 +44,16 @@
                                         <span class="pcoded-mtext">Pengujian</span>
                                     </a>
                                 </li>
+                                @if (Request::segment(1) == "analisis")
+                                <li class="{{ Request::is('pengujian') ? 'active' : 'active' }}">
+                                    @else
+                                <li class="">
+                                    @endif
+                                    <a href="/analisis">
+                                        <span class="pcoded-micon"><i class="feather icon-search"></i></span>
+                                        <span class="pcoded-mtext">Analisis</span>
+                                    </a>
+                                </li>
                                 @if (Request::segment(1) == "kontrol")
                                 <li class="{{ Request::is('kontrol') ? 'active' : 'active' }}">
                                     @else

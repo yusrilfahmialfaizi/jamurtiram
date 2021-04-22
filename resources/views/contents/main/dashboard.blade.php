@@ -39,42 +39,16 @@
                             </div>
                         </div>
                         <!-- ANGLE OFFSET AND ARC Ends -->
-                        <!-- LINE CHART start -->
-                        <div class="col-md-12 col-lg-6">
+                        <div class="col-md-12 col-lg-12">
                             <div class="card">
                                 <div class="card-header">
                                     <h5>DATA</h5>
                                 </div>
                                 <div class="card-block">
-                                    {{-- <div id="line-kelembapan"></div> --}}
-                                    {{-- <div class="ct-chart2 ct-perfect-fourth"></div> --}}
-                                    <div id="chartHumidity" style="height: 250px; width: 100%"></div>
+                                    <div id="line-kelembapan"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>DATA</h5>
-                                </div>
-                                <div class="card-block">
-                                    {{-- <div id="line-kelembapan"></div> --}}
-                                    <div id="chartTemp" style="height: 250px; width: 100%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- LINE CHART Ends -->
-                        <!-- LINE CHART start -->
-                        {{-- <div class="col-md-12 col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Suhu</h5>
-                                </div>
-                                <div class="card-block">
-                                    <div id="line-suhu"></div>
-                                </div>
-                            </div>
-                        </div> --}}
                         <!-- LINE CHART Ends -->
                     </div>
                 </div>
@@ -99,12 +73,12 @@
         firebase.initializeApp(firebaseConfig);
 
         firebase.database().ref('temp').on('value', (snap) => {
-            console.log(snap.val());
+            // console.log(snap.val());
             document.getElementById("suhu_nilai").innerHTML = snap.val() + " &#8451";
             $('#suhu').val(snap.val()).trigger('change');
         });
         firebase.database().ref('hum').on('value', (snap) => {
-            console.log(snap.val());
+            // console.log(snap.val());
             document.getElementById("lembap_nilai").innerHTML = snap.val() + " %";
             $('#lembap').val(snap.val()).trigger('change');
         });
@@ -114,17 +88,19 @@
         function kelembapanChart(firebaseConfig) {
 
             let dataset = [];
-            var dataLength = 20;
+            var dataLength = 3;
 
             firebase.database().ref('dataset').on('value', (snap) => {
                 var totalRecord = snap.numChildren();
                 var hum;
                 var temp;
-                var id
+                var id = 0;
+                var day;
 
 
-                for (let x = totalRecord - 20; x < totalRecord; x++) {
-                    id = x;
+                // for (let x = totalRecord - 20; x < totalRecord; x++) {
+                for (let x = 1; x < totalRecord; x++) {
+                    // id = x;
                     firebase.database().ref('dataset/' + x + '/humidity').once('value', function (
                         snapshot) {
                         snapshot.forEach(function (childSnapshot) {
@@ -135,6 +111,8 @@
                             data.on('value', snap => hum = snap.val());
                         });
                     });
+
+
                     firebase.database().ref('dataset/' + x + '/temperature').once('value', function (
                         snapshot) {
                         snapshot.forEach(function (childSnapshot) {
@@ -145,143 +123,69 @@
                             data.on('value', snap => temp = snap.val());
                         });
                     });
+                    firebase.database().ref('dataset/' + x + '/day').once('value', function (
+                        snapshot) {
+                        snapshot.forEach(function (childSnapshot) {
+                            var childKey = childSnapshot.key; //this is id 
+                            var dbRef = firebase.database();
+                            var data = dbRef.ref().child("dataset/" + x +
+                                "/day/" + childKey);
+                            data.on('value', snap => day = snap.val());
+                        });
+                    });
+                    var date = day.substring(0, 9);
+                    var clock = day.substring(10, 18);
+                    var newDate = date.replaceAll("/", "-")
+                    var tanggal = newDate.split("-").reverse().join("-");
+                    var dateObject = new Date(newDate);
                     let data = {
-                        "y": id,
-                        "hum": hum,
-                        "temp": temp
+                        "period": tanggal + " " + clock,
+                        "park1": hum,
+                        "park2": temp
                     }
-                    dataset.push(data);
+                    if (dataset.length > dataLength) {
+                        dataset.shift();
+                        dataset.push(data);
+                    }else{
+                        dataset.push(data);
+                    }
                 }
-                if (dataset.length > dataLength) {
-                    dataset.shift();
-                }
+                console.log(dataset);
                 window.lineChart = Morris.Line({
-                    element: "line-kelembapan",
-                    data: dataset,
-                    xkey: "y",
-                    redraw: true,
-                    ykeys: ["hum", "temp"],
-                    hideHover: "auto",
-                    labels: ["Kelembapan", "Suhu"],
-                    lineColors: ["#B4C1D7", "#FF9F55"],
+                    element: 'line-kelembapan',
+                    data: [{
+                            period: '2015-05-10 03:02:49',
+                            park1: 200,
+                            park2: 200,
+                        },
+                        {
+                            period: '2015-05-10 04:46:30',
+                            park1: 15,
+                            park2: 275,
+                        },
+                        {
+                            period: '2015-05-10 05:46:30',
+                            park1: 15,
+                            park2: 275,
+                        },
+                        {
+                            period: '2015-05-10 06:46:30',
+                            park1: 15,
+                            park2: 275,
+                        }
+                    ],
+                    // data: dataset,
+                    lineColors: ['#819C79', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+                    xkey: 'period',
+                    ykeys: ['park1', 'park2'],
+                    labels: ['Kelembapan', 'Suhu'],
+                    xLabels: 'period',
+                    xLabelAngle: 45,
+                    resize: true
                 });
             });
         }
-        window.onload = function () {
-            var dps1 = []; // dataPoints
-            var dps2 = []; // dataPoints
-            var chart1 = new CanvasJS.Chart("chartHumidity", {
-                title: {
-                    text: "Kelembapan",
-                },
-                data: [{
-                    type: "spline",
-                    markerSize: 0,
-                    dataPoints: dps1,
-                }, ],
-            });
-            var chart2 = new CanvasJS.Chart("chartTemp", {
-                title: {
-                    text: "Suhu",
-                },
-                data: [{
-                    type: "spline",
-                    markerSize: 0,
-                    dataPoints: dps2,
-                }, ],
-            });
-
-            var updateInterval = 5000;
-            var dataLength = 20; // number of dataPoints visible at any point
-
-            var updateChart1 = function (count) {
-                count = count || 1;
-
-                firebase.database().ref('dataset').on('value', (snap) => {
-                    var totalRecord = snap.numChildren();
-                    var hum;
-                    var temp;
-                    var id
-
-
-                    for (let x = totalRecord - 10; x < totalRecord; x++) {
-                        id = x;
-                        firebase.database().ref('dataset/' + x + '/humidity').once('value',
-                            function (
-                                snapshot) {
-                                snapshot.forEach(function (childSnapshot) {
-                                    var childKey = childSnapshot.key; //this is id 
-                                    var dbRef = firebase.database();
-                                    var data = dbRef.ref().child("dataset/" + x +
-                                        "/humidity/" +
-                                        childKey);
-                                    data.on('value', snap => hum = snap.val());
-                                });
-                            });
-                        dps1.push({
-                            x: id,
-                            y: hum,
-                        });
-                    }
-                });
-
-                if (dps1.length > dataLength) {
-                    dps1.shift();
-                }
-
-                chart1.render();
-            };
-
-            var updateChart2 = function (count) {
-                count = count || 1;
-
-                firebase.database().ref('dataset').on('value', (snap) => {
-                    var totalRecord = snap.numChildren();
-                    var hum;
-                    var temp;
-                    var id
-
-
-                    for (let x = totalRecord - 10; x < totalRecord; x++) {
-                        id = x;
-                        
-                        firebase.database().ref('dataset/' + x + '/temperature').once('value',
-                            function (
-                                snapshot) {
-                                snapshot.forEach(function (childSnapshot) {
-                                    var childKey = childSnapshot.key; //this is id 
-                                    var dbRef = firebase.database();
-                                    var data = dbRef.ref().child("dataset/" + x +
-                                        "/temperature/" + childKey);
-                                    data.on('value', snap => temp = snap.val());
-                                });
-                            });
-                        dps2.push({
-                            x: id,
-                            y: temp,
-                        });
-                    }
-                });
-
-                if (dps2.length > dataLength) {
-                    dps2.shift();
-                }
-
-                chart2.render();
-            };
-
-            updateChart1(dataLength);
-            setInterval(function () {
-                updateChart1();
-            }, updateInterval);
-
-            updateChart2(dataLength);
-            setInterval(function () {
-                updateChart2();
-            }, updateInterval);
-        };
-        
-    })
+    });
 </script>
 
 @endsection

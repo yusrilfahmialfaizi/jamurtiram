@@ -30,19 +30,29 @@
         href="{{asset('assets\assets\pages\data-table\css\buttons.dataTables.min.css')}}">
     <link rel="stylesheet" type="text/css"
         href="{{asset('assets\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css')}}">
-    <!-- Chartlist chart css -->
-    <link rel="stylesheet" href="{{asset('assets\bower_components\chartist\css\chartist.css')}}" type="text/css" 
-    media="all">
-    
+    <!-- Switch component css -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets\bower_components\switchery\css\switchery.min.css')}}">
+    <!-- Tags css -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets\bower_components\bootstrap-tagsinput\css\bootstrap-tagsinput.css')}}">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets\assets\icon\icofont\css\icofont.css')}}">
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets\assets\icon\font-awesome\css\font-awesome.min.css')}}">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets\assets\icon\themify-icons\themify-icons.css')}}">
+
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\style.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\jquery.mCustomScrollbar.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\jquery.mCustomScrollbar.css')}}    ">
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js"></script> --}}
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
