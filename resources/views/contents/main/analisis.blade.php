@@ -20,12 +20,13 @@
                             <div class="page-header-breadcrumb">
                                 <ul class="breadcrumb-title">
                                     <li class="breadcrumb-item">
-                                        <a href="index-1.htm"> <i class="feather icon-home"></i> </a>
+                                        <a href="dashboard"> <i class="feather icon-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Bootstrap Table</a>
-                                    </li>
+                                    <li class="breadcrumb-item"><a
+                                            href="{{Request::segment(1)}}">{{ucfirst(Request::segment(1))}}</a>
+                                        {{-- </li>
                                     <li class="breadcrumb-item"><a href="#!">Basic Initialization</a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                         </div>

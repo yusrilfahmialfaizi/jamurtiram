@@ -20,12 +20,13 @@
                             <div class="page-header-breadcrumb">
                                 <ul class="breadcrumb-title">
                                     <li class="breadcrumb-item">
-                                        <a href="index-1.htm"> <i class="feather icon-home"></i> </a>
+                                        <a href="dashboard"> <i class="feather icon-home"></i> </a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="#!">Bootstrap Table</a>
-                                    </li>
+                                    <li class="breadcrumb-item"><a
+                                            href="{{Request::segment(1)}}">{{ucfirst(Request::segment(1))}}</a>
+                                        {{-- </li>
                                     <li class="breadcrumb-item"><a href="#!">Basic Initialization</a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                         </div>
@@ -54,6 +55,7 @@
                                     accept-charset="UTF-8"> --}}
                                     {{ csrf_field() }}
                                     <div class="form-group row">
+                                        <div class="col-sm-1"></div>
                                         <label class="col-sm-2 col-form-label">Learning Rate</label>
                                         <div class="col-sm-2">
                                             <select name="learning_rate" id="learning_rate" class="form-control">
@@ -70,6 +72,7 @@
                                                 <option value="0.5">0.5</option>
                                             </select>
                                         </div>
+                                        <div class="col-sm-2"></div>
                                         <label class="col-sm-2 col-form-label">Epoch</label>
                                         <div class="col-sm-2">
                                             <select name="epoch" id="epoch" class="form-control">
@@ -86,16 +89,7 @@
                                                 <option value="1000">1000</option>
                                             </select>
                                         </div>
-                                        <label class="col-sm-2 col-form-label">Threshold Error</label>
-                                        <div class="col-sm-2">
-                                            <select name="error" id="error" class="form-control">
-                                                <option value="0.0001">default</option>
-                                                <option value="0.1">0.1</option>
-                                                <option value="0.01">0.01</option>
-                                                <option value="0.001">0.001</option>
-                                                <option value="0.0001">0.0001</option>
-                                            </select>
-                                        </div>
+                                        <div class="col-sm-1"></div>
                                     </div>
                                     <hr>
                                     <div class="form-group">
