@@ -10,7 +10,7 @@ class PerhitunganController extends Controller
     //
 
     function index(){
-        return view('contents/main/pengujian');
+        return view('contents/main/analisis');
     }
 
     function training(Request $request){
@@ -527,6 +527,8 @@ class PerhitunganController extends Controller
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
                 $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
+
+                $this->fuzzy($Y, $hasil_akhir, $target);
                 
                 // // return $Y;
                 // echo "<pre>";
@@ -547,22 +549,25 @@ class PerhitunganController extends Controller
                 // echo "</pre>";
 
                 // return response()->json(['hasil' => $Y, 'hasil_akhir' => $hasil_akhir]);
-                echo json_encode($hasil=['hasil' => $Y, 'hasil_akhir' => $hasil_akhir, 'target' => $target]);
-            // }
-        // }
+
+                
     }
 
-    function fuzzy(){
+    function fuzzy($Y, $hasil_akhir, $target){
         //belum fix
         $fuzzy_output = '';
         $nilai_fuzzy = 0;
-        
-        if ($Y <= $batas_buruk) {
+
+        if (round($Y, 2) <= 0.3) {
+            # code...
+            $nilai_fuzzy = 1;
             $fuzzy_output = 'Buruk';
+
         }
-        if ($Y > $batas_buruk && $Y < $batas_baik) {
-            $buruk  = ($batas_buruk - $Y) / ($batas_baik - $batas_buruk);
-            $baik   = ($Y - $batas_buruk) / ($batas_baik - $batas_buruk);
+        if (round($Y, 2) > 0.3 && round($Y, 2) < 0.4) {
+            # code...
+            $buruk  = (0.3 - round($Y, 2)) / (0.4 - 0.3);
+            $baik   = (round($Y, 2) - 0.3) / (0.4 - 0.3);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -571,21 +576,49 @@ class PerhitunganController extends Controller
                 $nilai_fuzzy = $buruk;
             }
         }
-        if ($Y >= $batas_baik) {
-            $fuzzy_output = 'Buruk';
-            $nilai_fuzzy = 0;
+        if (round($Y, 2) >= 0.4 && round($Y, 2) <= 0.6 ) {
+                $fuzzy_output = 'Baik';
+                $nilai_fuzzy = 1;
         }
+
+        if (round($Y, 2) > 0.6 && round($Y, 2) < 0.7 ) {
+            $buruk  = (0.6 - round($Y, 2)) / (0.7 - 0.6);
+            $baik   = (round($Y, 2) - 0.6) / (0.7 - 0.6);
+            if ($baik > $buruk) {
+                $fuzzy_output = 'Baik';
+                $nilai_fuzzy = $baik;
+            }else {
+                $fuzzy_output = 'Buruk';
+                $nilai_fuzzy = $buruk;
+            }
+        }
+
+        if (round($Y, 2) >= 0.7) {
+            $fuzzy_output = 'Buruk';
+            $nilai_fuzzy = 1;
+        }
+
+        $sigma = ($target - $hasil_akhir)/$target;
+        $hasil_mape     = (abs($sigma) / 1) * 100 ;
+
+        echo json_encode($hasil=['hasil' => $Y, 'hasil_akhir' => $hasil_akhir, 'target' => $target, 'nilai_fuzzy' => $nilai_fuzzy, 'fuzzy_output' => $fuzzy_output, 'mape' => $hasil_mape]);
     }
 
-    function train(){
+    function pengujian(){
+        return view('contents/main/pengujian');
+    }
+
+    function train(Request $request){
         // $dataset    = DB::table('data_testing')->get();
         $data_Norm  = DB::table('data_training')->get();
         // return view('contents/coba', ['dataset' => $dataset]);
         #####pengujian di epoch alpha dan bias yang paling optimal#####
 
-        $numEpoch           = 1000;
-        $alpha              = 0.1;
-        $thresh             = 0.00001;
+        // $numEpoch           = 1000;
+        // $alpha              = 0.1;
+        // $thresh             = 0.00001;
+        $numEpoch           = $request->input("epoch");
+        $alpha              = $request->input("learning_rate");
         $count              = DB::table("data_training")->count();
         $niu                = 0.5;
 
@@ -801,16 +834,16 @@ class PerhitunganController extends Controller
                 // Error < Error maksimum
                 // $Error = 0.5 * pow($datanormalTarget - $Y,2); // error kuadratis
                 $Error = (pow(($datanormalTarget - $Y),2)) / $count; //MSE
-                if ($Error < $thresh) {
-                    break;
-                    $epochke = $i;
+                // if ($Error < $thresh) {
+                //     break;
+                //     $epochke = $i;
                             
-                }
+                // }
 
             }
-            if ($Error < $thresh){
-                break;
-            }
+            // if ($Error < $thresh){
+            //     break;
+            // }
         
         }
         $this->test($bX1Z1, $bX1Z2, $bX1Z3, $bX2Z1, $bX2Z2, $bX2Z3, $bX0Z1, $bX0Z2, $bX0Z3, $bZ0Y, $bZ1Y, $bZ2Y, $bZ3Y);
@@ -916,38 +949,41 @@ class PerhitunganController extends Controller
                 $Y      = 1 / (1 + exp(-$Y_inY));
                 $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
                 
-                // return $Y;
-                echo "<pre>";
-                // echo $data->entry_id. "\n\n\n\n";
-                echo $Z_inZ1 . "\n\n\n";
-                echo $Z_inZ2 . "\n\n\n";
-                echo $Z1 . "\n\n\n";
-                echo $Z2 . "\n\n\n";
-                echo "</pre>";
+                // // return $Y;
+                // echo "<pre>";
+                // // echo $data->entry_id. "\n\n\n\n";
+                // echo $Z_inZ1 . "\n\n\n";
+                // echo $Z_inZ2 . "\n\n\n";
+                // echo $Z1 . "\n\n\n";
+                // echo $Z2 . "\n\n\n";
+                // echo "</pre>";
                 
-                echo "<pre>Y_inY : ";
-                echo $Y_inY . "\n\n\n";
-                echo "</pre>";
+                // echo "<pre>Y_inY : ";
+                // echo $Y_inY . "\n\n\n";
+                // echo "</pre>";
         
-                echo "<pre> Y : ";
-                echo $Y . "\n\n\n";
-                echo $hasil_akhir;
-                echo "</pre>";
+                // echo "<pre> Y : ";
+                // echo $Y . "\n\n\n";
+                // echo $hasil_akhir;
+                // echo "</pre>";
                 
-                echo "<pre> Sigma : ";
-                echo $avg   ." = "."((".$data->target ."-". $hasil_akhir.")/".$data->target.")" . "\n\n\n";
+                // echo "<pre> Sigma : ";
+                // echo $avg   ." = "."((".$data->target ."-". $hasil_akhir.")/".$data->target.")" . "\n\n\n";
                 $avg   = (($data->target - $hasil_akhir)/$data->target);
                 // $avg   = (($data->target - $hasil_akhir)/$data->target);
                 $sigma = $sigma + $avg;
-                echo $sigma . "\n\n\n";
-                echo "</pre>";
+                // echo $sigma . "\n\n\n";
+                // echo "</pre>";
             }
             // $hasil_mape  = (abs($mape)/ $n) * 100 ;
-            echo "<pre> MAPE : ";
-            echo "(abs(".$sigma.")/". $n.") * 100"."\n\n\n\n\n";
-            $hasil_mape  = (abs($sigma)/ $n) * 100 ;
-            echo "MAPE : ".round($hasil_mape, 2)."%" . "\n\n\n";
-            echo "</pre>";
+            // echo "<pre> MAPE : ";
+            // echo "(abs(".$sigma.")/". $n.") * 100"."\n\n\n\n\n";
+            $hasil_mape     = (abs($sigma)/ $n) * 100 ;
+            $hasil_mape     = round($hasil_mape, 2)."%" ;
+            $akurasi        = (100 - round($hasil_mape, 2))."%";
+            // echo "MAPE : ".round($hasil_mape, 2)."%" . "\n\n\n";
+            // echo "</pre>";
+            echo json_encode($hasil=['mape' => $hasil_mape, "akurasi" => $akurasi]);
         // }
     }
 }

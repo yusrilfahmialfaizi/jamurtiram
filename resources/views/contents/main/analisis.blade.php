@@ -98,21 +98,51 @@
                                         </div>
                                     </div>
                                     <hr>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Temperatur</label>
+                                        <div class="col-sm-4">
+                                            <input type="number" name="suhu" step=any id="suhu" class="form-control"
+                                                min="0" required>
+                                        </div>
+                                        {{-- </div>
+                                        <div class="form-group row"> --}}
+                                        <label class="col-sm-2 col-form-label">Kelembapan</label>
+                                        <div class="col-sm-4">
+                                            <input type="number" min="0" step=any name="kelembapan" id="kelembapan"
+                                                class="form-control" required>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-sm-2">
                                             {{-- <input type="submit" class="form-control" min="0" class="btn btn-primary" value="Analysis"> --}}
-                                            <button class="btn btn-primary" name="analys" id="analys">Uji Data</button>
+                                            <button class="btn btn-primary" name="analys" id="analys">Analysis</button>
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label" id="label_hasil">Hasil MAPE</label>
+                                        <label class="col-sm-2 col-form-label" id="label_hasil">Hasil</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="output" id="output" class="form-control" readonly>
                                         </div>
-                                        <label class="col-sm-2 col-form-label" id="label_akurasi">Akurasi</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" id="label_T">Target</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="akurasi" id="akurasi" class="form-control" readonly>
+                                            <input type="text" name="target" id="target" class="form-control" readonly>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label" id="label_Ta">Target Akhir</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="hasil" id="hasil" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label" id="label_NF">Nilai Fuzzy</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="nilai_fuzzy" id="nilai_fuzzy" class="form-control" readonly>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label" id="label_HF">Hasil Fuzzy</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="hasil_fuzzy" id="hasil_fuzzy" class="form-control" readonly>
                                         </div>
                                     </div>
                                     {{-- </form> --}}
@@ -121,18 +151,26 @@
                             </div>
                             <script type="text/javascript">
                                 $(document).ready(function () {
-                                    document.getElementById("label_hasil").style.display    = 'none';
-                                    document.getElementById("output").style.display         = 'none';
-                                    document.getElementById("label_akurasi").style.display    = 'none';
-                                    document.getElementById("akurasi").style.display         = 'none';
+                                    document.getElementById("label_hasil").style.display        = 'none';
+                                    document.getElementById("output").style.display             = 'none';
+                                    document.getElementById("label_Ta").style.display           = 'none';
+                                    document.getElementById("hasil").style.display              = 'none';
+                                    document.getElementById("label_T").style.display            = 'none';
+                                    document.getElementById("target").style.display             = 'none';
+                                    document.getElementById("label_NF").style.display           = 'none';
+                                    document.getElementById("nilai_fuzzy").style.display        = 'none';
+                                    document.getElementById("label_HF").style.display           = 'none';
+                                    document.getElementById("hasil_fuzzy").style.display        = 'none';
 
                                     $("#analys").on('click', function () {
                                         var learning_rate = $('#learning_rate').val();
                                         var epoch = $('#epoch').val();
                                         var error = $('#error').val();
+                                        var suhu = $('#suhu').val();
+                                        var kelembapan = $('#kelembapan').val();
 
                                         $.ajax({
-                                            url: "{{URL::to('perhitungan/train')}}",
+                                            url: "{{URL::to('perhitungan/training')}}",
                                             type: 'POST',
                                             headers: {
                                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
@@ -142,17 +180,29 @@
                                             dataType: 'json',
                                             data: {
                                                 learning_rate: learning_rate,
-                                                epoch: epoch
+                                                epoch: epoch,
+                                                error: error,
+                                                suhu: suhu,
+                                                kelembapan: kelembapan
                                             },
                                             cache: false,
                                             success: function (data) {
                                                 console.log(data);
                                                 document.getElementById("label_hasil").style.display    = 'block';
                                                 document.getElementById("output").style.display         = 'block';
-                                                document.getElementById("label_akurasi").style.display    = 'block';
-                                                document.getElementById("akurasi").style.display         = 'block';
-                                                document.getElementById("output").value                 = data.mape;
-                                                document.getElementById("akurasi").value                 = data.akurasi;
+                                                document.getElementById("label_Ta").style.display       = 'block';
+                                                document.getElementById("hasil").style.display          = 'block';
+                                                document.getElementById("label_T").style.display        = 'block';
+                                                document.getElementById("target").style.display         = 'block';
+                                                document.getElementById("label_NF").style.display           = 'block';
+                                                document.getElementById("nilai_fuzzy").style.display        = 'block';
+                                                document.getElementById("label_HF").style.display           = 'block';
+                                                document.getElementById("hasil_fuzzy").style.display        = 'block';
+                                                document.getElementById("output").value         = data.hasil;
+                                                document.getElementById("target").value         = data.target;
+                                                document.getElementById("hasil").value          = data.hasil_akhir;
+                                                document.getElementById("nilai_fuzzy").value    = data.nilai_fuzzy;
+                                                document.getElementById("hasil_fuzzy").value    = data.fuzzy_output;
                                             }
                                         })
                                     })

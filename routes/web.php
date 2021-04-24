@@ -25,4 +25,5 @@ Route::get('/kontrol', 'KontrolController@index');
 Route::get('/perhitungan/testing', 'PerhitunganController@testing');
 Route::get('/firebase', 'FirebaseController@index');
 Route::post('/perhitungan/training', 'PerhitunganController@training');
-Route::get('/test', 'PerhitunganController@train');
+Route::post('/perhitungan/train', 'PerhitunganController@train');
+Route::get('/pengujian', 'PerhitunganController@pengujian');
