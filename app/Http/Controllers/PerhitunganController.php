@@ -526,7 +526,9 @@ class PerhitunganController extends Controller
                 
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
-                $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
+                $dataY_asli = 1 - $Y;
+                // $hasil_akhir = ((($dataY_asli - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
+                $hasil_akhir = ((($dataY_asli - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget);
 
                 $this->fuzzy($Y, $hasil_akhir, $target);
                 
@@ -617,19 +619,16 @@ class PerhitunganController extends Controller
         // $numEpoch           = 1000;
         // $alpha              = 0.1;
         // $thresh             = 0.00001;
-        $numEpoch           = $request->input("epoch");
-        $alpha              = $request->input("learning_rate");
-        $count              = DB::table("data_training")->count();
-        $niu                = 0.5;
+        $numEpoch   = $request->input("epoch");
+        $alpha      = $request->input("learning_rate");
+        $count      = DB::table("data_training")->count();
+        $niu        = 0.5;
 
         $Error      = 0.0;
         
         $beta       = round(0.7 * sqrt(3), 2);
         
-        $bX0Z1      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z1
-        $bX0Z2      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z2
-        $bX0Z3      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z3
-
+        
         $bX0Z1tmin1 = 0; 
         $bX0Z2tmin1 = 0; 
         $bX0Z3tmin1 = 0;
@@ -641,15 +640,18 @@ class PerhitunganController extends Controller
         $bX2Z1tmin1 = 0; 
         $bX2Z2tmin1 = 0; 
         $bX2Z3tmin1 = 0;
-
+        
         $bZ0Ytmin1  = 0;
         $bZ1Ytmin1  = 0;
         $bZ2Ytmin1  = 0;
         $bZ3Ytmin1  = 0;
-
+        
         // echo $beta*100 . "\n";
         // echo $bias."\n";
-
+        
+        $bX0Z1      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z1
+        $bX0Z2      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z2
+        $bX0Z3      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z3
         
         $bX1Z1      = rand(-5, 5) / 10;
         $bX1Z2      = rand(-5, 5) / 10;
@@ -672,14 +674,14 @@ class PerhitunganController extends Controller
         $V3         = round(sqrt((pow($bX1Z3,2) + pow($bX2Z3,2))),2);
 
 
-        $bX1Z1 = round(($beta*$bX1Z1)/$V1, 2);
-        $bX2Z1 = round(($beta*$bX2Z1)/$V1, 2);
+        $bX1Z1      = round(($beta*$bX1Z1)/$V1, 2);
+        $bX2Z1      = round(($beta*$bX2Z1)/$V1, 2);
 
-        $bX1Z2 = round(($beta*$bX1Z2)/$V2, 2);
-        $bX2Z2 = round(($beta*$bX1Z2)/$V2, 2);
+        $bX1Z2      = round(($beta*$bX1Z2)/$V2, 2);
+        $bX2Z2      = round(($beta*$bX1Z2)/$V2, 2);
 
-        $bX1Z3 = round(($beta*$bX1Z3)/$V3, 2);
-        $bX2Z3 = round(($beta*$bX1Z3)/$V3, 2);
+        $bX1Z3      = round(($beta*$bX1Z3)/$V3, 2);
+        $bX2Z3      = round(($beta*$bX1Z3)/$V3, 2);
 
         // get max
         $datamaxHum     = DB::table('data_training')->max('humidity');
@@ -947,7 +949,9 @@ class PerhitunganController extends Controller
                 
                 // menghitung aktifasi hidden layer ke output
                 $Y      = 1 / (1 + exp(-$Y_inY));
-                $hasil_akhir = ((($Y - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
+                $dataY_asli = 1 - $Y;
+                // $hasil_akhir = ((($dataY_asli - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget) + 1;
+                $hasil_akhir = ((($dataY_asli - 0.1) / (0.8)) * ($datamaxTarget - $dataminTarget) + $dataminTarget);
                 
                 // // return $Y;
                 // echo "<pre>";
