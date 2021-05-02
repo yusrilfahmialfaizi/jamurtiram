@@ -5,9 +5,14 @@
             <a class="mobile-menu" id="mobile-collapse" href="#!">
                 <i class="feather icon-menu"></i>
             </a>
-            <a href="/dashboard">
-                <img class="img-fluid" src="{{asset('assets/assets\images\logo.png')}}" alt="Theme-Logo">
-            </a>
+            <center>
+
+                <a href="/dashboard">
+                    <span><h5 style="font-family: Lilita One; font-size:22px; margin-left:50px"><i class="feather icon-feather"></i> SIJATI</h5></span>
+                    
+                </a>
+                {{-- <img class="img-fluid" src="{{asset('assets/assets\images\logo.png')}}" alt="Theme-Logo"> --}}
+            </center>
             <a class="mobile-options">
                 <i class="feather icon-more-horizontal"></i>
             </a>

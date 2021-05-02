@@ -1,5 +1,5 @@
 <head>
-    <title>Adminty - Premium Admin Template by Colorlib </title>
+    <title>SIJATI - Sistem Informasi Jamur Tiram</title>
     <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 10]>
@@ -16,9 +16,10 @@
     <meta name="author" content="#">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ asset('assets\assets\images\favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets\assets\images\feather.ico')}}" type="image/x-icon">
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lilita One' rel='stylesheet'>
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets\bower_components\bootstrap\css\bootstrap.min.css')}}">
     <!-- feather Awesome -->
