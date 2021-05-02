@@ -44,6 +44,16 @@
                                         <span class="pcoded-mtext">Pengujian</span>
                                     </a>
                                 </li>
+                                @if (Request::segment(1) == "analisis-datatest")
+                                <li class="{{ Request::is('analisis-datatest') ? 'active' : 'active' }}">
+                                    @else
+                                <li class="">
+                                    @endif
+                                    <a href="/analisis-datatest">
+                                        <span class="pcoded-micon"><i class="feather icon-slack"></i></span>
+                                        <span class="pcoded-mtext">Analisis Data Test</span>
+                                    </a>
+                                </li>
                                 @if (Request::segment(1) == "analisis")
                                 <li class="{{ Request::is('pengujian') ? 'active' : 'active' }}">
                                     @else
@@ -51,7 +61,7 @@
                                     @endif
                                     <a href="/analisis">
                                         <span class="pcoded-micon"><i class="feather icon-search"></i></span>
-                                        <span class="pcoded-mtext">Analisis</span>
+                                        <span class="pcoded-mtext">Analisis Mandiri</span>
                                     </a>
                                 </li>
                                 @if (Request::segment(1) == "kontrol")

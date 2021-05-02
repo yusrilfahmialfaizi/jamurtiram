@@ -89,12 +89,12 @@
                         "park1": hum,
                         "park2": temp
                     }
-                        console.log(dataset.length);
-                        // console.log(dataLength);
+                    console.log(dataset.length);
+                    // console.log(dataLength);
                     if (dataset.length > dataLength) {
                         dataset.shift();
                         dataset.push(data);
-                    }else{
+                    } else {
                         dataset.push(data);
                     }
                 }
@@ -248,4 +248,10 @@
         };
 
     })
+</script>
+<script>
+    var rata2mape = (parseFloat(data[0].mape) + parseFloat(data[1].mape) + parseFloat(data[2].mape) + parseFloat(data[3].mape) + parseFloat(data[4].mape) + parseFloat(data[5].mape) + parseFloat(data[6]
+        .mape) + parseFloat(data[7].mape) + parseFloat(data[8].mape) + parseFloat(data[9].mape)) / 10;
+    var rata2akurasi = (parseFloat(data[0].akurasi) + parseFloat(data[1].akurasi) + parseFloat(data[2].akurasi) + parseFloat(data[3].akurasi) + parseFloat(data[4].akurasi) + parseFloat(data[
+        5].)akurasi + parseFloat(data[6].akurasi) + parseFloat(data[7].akurasi) + parseFloat(data[8].akurasi) + parseFloat(data[9].akurasi)) / 10;
 </script>

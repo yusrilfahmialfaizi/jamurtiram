@@ -83,10 +83,34 @@
             $('#lembap').val(snap.val()).trigger('change');
         });
 
-        kelembapanChart();
+        var morrisLine;
+        initMorris();
+        getMorris();
+        // setMorris(data);
+        // getMorrisOffline();
 
-        function kelembapanChart(firebaseConfig) {
+        function initMorris() {
+            morrisLine = Morris.Line({
+                element: 'line-kelembapan',
+                xkey: 'period',
+                ykeys: ['a', 'b'],
+                labels: ['Humidity', 'Temperature'],
+                xLabelAngle: 10,
+                parseTime: false,
+                resize: true,
+                lineColors: ['#32c5d2', '#c03e26']
+            });
+        }
 
+        function setMorris(data) {
+            morrisLine.setData(data);
+        }
+
+        function getMorris() {
+            // $.get('@Url.Action("GetData")', function (result) {
+            // setMorris(result);
+            // });
+            var dataLength = 7;
             let dataset = [];
             var dataLength = 3;
 
@@ -97,42 +121,44 @@
                 var id = 0;
                 var day;
 
-
-                // for (let x = totalRecord - 20; x < totalRecord; x++) {
                 for (let x = 1; x < totalRecord; x++) {
                     // id = x;
-                    firebase.database().ref('dataset/' + x + '/humidity').once('value', function (
-                        snapshot) {
-                        snapshot.forEach(function (childSnapshot) {
-                            var childKey = childSnapshot.key; //this is id 
-                            var dbRef = firebase.database();
-                            var data = dbRef.ref().child("dataset/" + x + "/humidity/" +
-                                childKey);
-                            data.on('value', snap => hum = snap.val());
+                    firebase.database().ref('dataset/' + x + '/humidity').once('value',
+                        function (
+                            snapshot) {
+                            snapshot.forEach(function (childSnapshot) {
+                                var childKey = childSnapshot.key; //this is id 
+                                var dbRef = firebase.database();
+                                var data = dbRef.ref().child("dataset/" + x +
+                                    "/humidity/" +
+                                    childKey);
+                                data.on('value', snap => hum = snap.val());
+                            });
                         });
-                    });
 
 
-                    firebase.database().ref('dataset/' + x + '/temperature').once('value', function (
-                        snapshot) {
-                        snapshot.forEach(function (childSnapshot) {
-                            var childKey = childSnapshot.key; //this is id 
-                            var dbRef = firebase.database();
-                            var data = dbRef.ref().child("dataset/" + x +
-                                "/temperature/" + childKey);
-                            data.on('value', snap => temp = snap.val());
+                    firebase.database().ref('dataset/' + x + '/temperature').once('value',
+                        function (
+                            snapshot) {
+                            snapshot.forEach(function (childSnapshot) {
+                                var childKey = childSnapshot.key; //this is id 
+                                var dbRef = firebase.database();
+                                var data = dbRef.ref().child("dataset/" + x +
+                                    "/temperature/" + childKey);
+                                data.on('value', snap => temp = snap.val());
+                            });
                         });
-                    });
-                    firebase.database().ref('dataset/' + x + '/day').once('value', function (
-                        snapshot) {
-                        snapshot.forEach(function (childSnapshot) {
-                            var childKey = childSnapshot.key; //this is id 
-                            var dbRef = firebase.database();
-                            var data = dbRef.ref().child("dataset/" + x +
-                                "/day/" + childKey);
-                            data.on('value', snap => day = snap.val());
+                    firebase.database().ref('dataset/' + x + '/day').once('value',
+                        function (
+                            snapshot) {
+                            snapshot.forEach(function (childSnapshot) {
+                                var childKey = childSnapshot.key; //this is id 
+                                var dbRef = firebase.database();
+                                var data = dbRef.ref().child("dataset/" + x +
+                                    "/day/" + childKey);
+                                data.on('value', snap => day = snap.val());
+                            });
                         });
-                    });
                     var date = day.substring(0, 9);
                     var clock = day.substring(10, 18);
                     var newDate = date.replaceAll("/", "-")
@@ -140,52 +166,176 @@
                     var dateObject = new Date(newDate);
                     let data = {
                         "period": tanggal + " " + clock,
-                        "park1": hum,
-                        "park2": temp
+                        "a": hum,
+                        "b": temp
                     }
                     if (dataset.length > dataLength) {
                         dataset.shift();
                         dataset.push(data);
-                    }else{
+                    } else {
                         dataset.push(data);
                     }
                 }
-                console.log(dataset);
-                window.lineChart = Morris.Line({
-                    element: 'line-kelembapan',
-                    data: [{
-                            period: '2015-05-10 03:02:49',
-                            park1: 200,
-                            park2: 200,
+                if (dataset.length != 0) {
+                    setMorris(dataset);
+                } else {
+                    var lineData = [{
+                            period: '2021-04-20 14:14:24',
+                            a: 76.86,
+                            b: 28.9
                         },
                         {
-                            period: '2015-05-10 04:46:30',
-                            park1: 15,
-                            park2: 275,
+                            period: '2021-04-20 14:14:34',
+                            a: 76.71,
+                            b: 28.91
                         },
                         {
-                            period: '2015-05-10 05:46:30',
-                            park1: 15,
-                            park2: 275,
+                            period: '2021-04-20 14:14:45',
+                            a: 76.57,
+                            b: 28.89
                         },
                         {
-                            period: '2015-05-10 06:46:30',
-                            park1: 15,
-                            park2: 275,
+                            period: '2021-04-20 14:14:55',
+                            a: 76.71,
+                            b: 28.9
+                        },
+                        {
+                            period: '2021-04-20 14:15:05',
+                            a: 77,
+                            b: 28.91
+                        },
+                        {
+                            period: '2021-04-20 14:15:15',
+                            a: 76.71,
+                            b: 28.93
+                        },
+                        {
+                            period: '2021-04-20 14:15:26',
+                            a: 76.71,
+                            b: 28.91
                         }
-                    ],
-                    // data: dataset,
-                    lineColors: ['#819C79', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
-                    xkey: 'period',
-                    ykeys: ['park1', 'park2'],
-                    labels: ['Kelembapan', 'Suhu'],
-                    xLabels: 'period',
-                    xLabelAngle: 45,
-                    resize: true
-                });
+                    ];
+                    setMorris(lineData);
+                }
+
             });
         }
+
+        function getMorrisOffline() {
+
+        }
     });
+
+    // kelembapanChart();
+
+    // function kelembapanChart(firebaseConfig) {
+
+    //     let dataset = [];
+    //     var dataLength = 3;
+
+    //     firebase.database().ref('dataset').on('value', (snap) => {
+    //         var totalRecord = snap.numChildren();
+    //         var hum;
+    //         var temp;
+    //         var id = 0;
+    //         var day;
+
+
+    //         // for (let x = totalRecord - 20; x < totalRecord; x++) {
+    //         for (let x = 1; x < totalRecord; x++) {
+    //             // id = x;
+    //             firebase.database().ref('dataset/' + x + '/humidity').once('value',
+    //                 function (
+    //                     snapshot) {
+    //                     snapshot.forEach(function (childSnapshot) {
+    //                         var childKey = childSnapshot.key; //this is id 
+    //                         var dbRef = firebase.database();
+    //                         var data = dbRef.ref().child("dataset/" + x +
+    //                             "/humidity/" +
+    //                             childKey);
+    //                         data.on('value', snap => hum = snap.val());
+    //                     });
+    //                 });
+
+
+    //             firebase.database().ref('dataset/' + x + '/temperature').once('value',
+    //                 function (
+    //                     snapshot) {
+    //                     snapshot.forEach(function (childSnapshot) {
+    //                         var childKey = childSnapshot.key; //this is id 
+    //                         var dbRef = firebase.database();
+    //                         var data = dbRef.ref().child("dataset/" + x +
+    //                             "/temperature/" + childKey);
+    //                         data.on('value', snap => temp = snap.val());
+    //                     });
+    //                 });
+    //             firebase.database().ref('dataset/' + x + '/day').once('value',
+    //                 function (
+    //                     snapshot) {
+    //                     snapshot.forEach(function (childSnapshot) {
+    //                         var childKey = childSnapshot.key; //this is id 
+    //                         var dbRef = firebase.database();
+    //                         var data = dbRef.ref().child("dataset/" + x +
+    //                             "/day/" + childKey);
+    //                         data.on('value', snap => day = snap.val());
+    //                     });
+    //                 });
+    //             var date = day.substring(0, 9);
+    //             var clock = day.substring(10, 18);
+    //             var newDate = date.replaceAll("/", "-")
+    //             var tanggal = newDate.split("-").reverse().join("-");
+    //             var dateObject = new Date(newDate);
+    //             let data = {
+    //                 "period": tanggal + " " + clock,
+    //                 "park1": hum,
+    //                 "park2": temp
+    //             }
+    //             if (dataset.length > dataLength) {
+    //                 dataset.shift();
+    //                 dataset.push(data);
+    //             } else {
+    //                 dataset.push(data);
+    //             }
+    //         }
+    //         console.log(dataset);
+    //         window.lineChart = Morris.Line({
+    //             element: 'line-kelembapan',
+    //             data: [{
+    //                     period: '2015-05-10 03:02:49',
+    //                     park1: 200,
+    //                     park2: 200,
+    //                 },
+    //                 {
+    //                     period: '2015-05-10 04:46:30',
+    //                     park1: 15,
+    //                     park2: 275,
+    //                 },
+    //                 {
+    //                     period: '2015-05-10 05:46:30',
+    //                     park1: 15,
+    //                     park2: 275,
+    //                 },
+    //                 {
+    //                     period: '2015-05-10 06:46:30',
+    //                     park1: 15,
+    //                     park2: 275,
+    //                 }
+    //             ],
+    //             // data: dataset,
+    //             lineColors: ['#819C79', '#fc8710', '#FF6541', '#A4ADD3',
+    //                 '#766B56'
+    //             ],
+    //             xkey: 'period',
+    //             ykeys: ['park1', 'park2'],
+    //             labels: ['Kelembapan', 'Suhu'],
+    //             xLabels: 'period',
+    //             xLabelAngle: 45,
+    //             resize: true
+    //         });
+    //     });
+    // }
+    // });
+    // });
 </script>
 
 @endsection

@@ -90,8 +90,8 @@
                                         </div>
                                         <label class="col-sm-2 col-form-label">Suhu Batas Siram</label>
                                         <div class="col-sm-4">
-                                            <input type="number" name="batas_suhu" step=any id="batas_suhu" class="form-control"
-                                                min="0" required>
+                                            <input type="number" name="batas_suhu" step=any id="batas_suhu"
+                                                class="form-control" min="0" required>
                                         </div>
                                     </div>
                                     <hr>
@@ -107,80 +107,87 @@
 
                                 </div>
                             </div>
-                            <script type="text/javascript">
-                                $(document).ready(function () {
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
 
-                                    var firebaseConfig = {
-                                        apiKey: "AIzaSyAfolJxQxt38Dj6sLFGVwFxUa5B2qALBuI",
-                                        authDomain: "jamurtiram-a1bc2.firebaseapp.com",
-                                        databaseURL: "https://jamurtiram-a1bc2-default-rtdb.firebaseio.com",
-                                        projectId: "jamurtiram-a1bc2",
-                                        storageBucket: "jamurtiram-a1bc2.appspot.com",
-                                        messagingSenderId: "420391507616",
-                                        appId: "1:420391507616:web:5c591251e33b470061dbc5",
-                                        measurementId: "G-E6MV5SJJ4C"
-                                    };
-                                    // Initialize Firebase
-                                    firebase.initializeApp(firebaseConfig);
+        var firebaseConfig = {
+            apiKey: "AIzaSyAfolJxQxt38Dj6sLFGVwFxUa5B2qALBuI",
+            authDomain: "jamurtiram-a1bc2.firebaseapp.com",
+            databaseURL: "https://jamurtiram-a1bc2-default-rtdb.firebaseio.com",
+            projectId: "jamurtiram-a1bc2",
+            storageBucket: "jamurtiram-a1bc2.appspot.com",
+            messagingSenderId: "420391507616",
+            appId: "1:420391507616:web:5c591251e33b470061dbc5",
+            measurementId: "G-E6MV5SJJ4C"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
 
-                                    firebase.database().ref('auto').on('value', (snap) => {
-                                        // console.log(snap.val());
-                                        if (snap.val() == 99) {
-                                            document.getElementById("otomatis").checked = true;
-                                            document.getElementById("manual").disabled = true;
-                                            document.getElementById("lama_siram").disabled = false;
-                                            document.getElementById("batas_suhu").disabled = false;
-                                            document.getElementById("set").disabled = false;
-                                            document.getElementById("reset").disabled = false;
+        firebase.database().ref('auto').on('value', (snap) => {
+            // console.log(snap.val());
+            if (snap.val() == 99) {
+                document.getElementById("otomatis").checked = true;
+                document.getElementById("manual").disabled = true;
+                document.getElementById("lama_siram").disabled = false;
+                document.getElementById("batas_suhu").disabled = false;
+                document.getElementById("set").disabled = false;
+                document.getElementById("reset").disabled = false;
 
 
-                                        } else if (snap.val() == 98) {
-                                        
-                                            document.getElementById("otomatis").checked = false;
-                                            document.getElementById("manual").disabled = false;
-                                            document.getElementById("lama_siram").disabled = true;
-                                            document.getElementById("batas_suhu").disabled = true;
-                                            document.getElementById("set").disabled = true;
-                                            document.getElementById("reset").disabled = true;
+            } else if (snap.val() == 98) {
 
-                                        }
-                                        // document.getElementById("suhu_nilai").innerHTML = snap.val() +
-                                        //     " &#8451";
-                                        // $('#suhu').val(snap.val()).trigger('change');
-                                    });
+                document.getElementById("otomatis").checked = false;
+                document.getElementById("manual").disabled = false;
+                document.getElementById("lama_siram").disabled = true;
+                document.getElementById("batas_suhu").disabled = true;
+                document.getElementById("set").disabled = true;
+                document.getElementById("reset").disabled = true;
 
-                                    // Add Data
-                                    $('#otomatis').on('click', function () {
-                                        if (document.getElementById("otomatis").checked == true) {
-                                            firebase.database().ref().child("auto").set(99);
-                                        }else if (document.getElementById("otomatis").checked == false) {
-                                            firebase.database().ref().child("auto").set(98);
-                                        }
-                                    });
-                                    $('#manual').on('click', function () {
-                                        if (document.getElementById("manual").checked == true) {
-                                            document.getElementById("otomatis").checked = false;
-                                            firebase.database().ref().child("auto").set(98);
-                                            firebase.database().ref().child("pompa_dc").set(255);
-                                            firebase.database().ref().child("relay_ac").set(1);
-                                        }else if (document.getElementById("manual").checked == false) {
-                                            firebase.database().ref().child("pompa_dc").set(0);
-                                            firebase.database().ref().child("relay_ac").set(0);
-                                        }
-                                    });
-                                    $('#set').on('click', function () {
+            }
+            // document.getElementById("suhu_nilai").innerHTML = snap.val() +
+            //     " &#8451";
+            // $('#suhu').val(snap.val()).trigger('change');
+        });
 
-                                        var lama_siram = $('#lama_siram').val();
-                                        var batas_suhu = $('#batas_suhu').val();
+        // Add Data
+        $('#otomatis').on('click', function () {
+            if (document.getElementById("otomatis").checked == true) {
+                firebase.database().ref().child("auto").set(99);
+            } else if (document.getElementById("otomatis").checked == false) {
+                firebase.database().ref().child("auto").set(98);
+            }
+        });
+        $('#manual').on('click', function () {
+            if (document.getElementById("manual").checked == true) {
+                document.getElementById("otomatis").checked = false;
+                firebase.database().ref().child("auto").set(98);
+                firebase.database().ref().child("pompa_dc").set(255);
+                firebase.database().ref().child("relay_ac").set(1);
+            } else if (document.getElementById("manual").checked == false) {
+                firebase.database().ref().child("pompa_dc").set(0);
+                firebase.database().ref().child("relay_ac").set(0);
+            }
+        });
+        $('#set').on('click', function () {
 
-                                        console.log(lama_siram);
-                                        console.log(batas_suhu);
+            var lama_siram = $('#lama_siram').val();
+            var batas_suhu = $('#batas_suhu').val();
 
-                                        firebase.database().ref().child("auto").set(99);
-                                        firebase.database().ref().child("bs").set(batas_suhu);
-                                        firebase.database().ref().child("sr").set(lama_siram);
+            console.log(lama_siram);
+            console.log(batas_suhu);
 
-                                    });
-                                });
-                            </script>
-                            @endsection
+            firebase.database().ref().child("auto").set(99);
+            firebase.database().ref().child("bs").set(batas_suhu);
+            firebase.database().ref().child("sr").set(lama_siram);
+
+        });
+    });
+</script>
+@endsection

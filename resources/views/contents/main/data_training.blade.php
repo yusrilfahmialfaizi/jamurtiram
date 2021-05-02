@@ -53,15 +53,20 @@
                                             <thead>
                                                 <tr>
                                                     <th>Entry Id</th>
+                                                    <th>Day</th>
                                                     <th>Humidity</th>
                                                     <th>Temperature</th>
                                                     <th>Target</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php
+                                                $n=1;
+                                                @endphp
                                                 @foreach($dataset as $data)
                                                 <tr>
-                                                    <td>{{$data->entry_id}}</td>
+                                                    <td>{{$n++}}</td>
+                                                    <td>{{$data->day}}</td>
                                                     <td>{{$data->humidity}}</td>
                                                     <td>{{$data->temperature}}</td>
                                                     <td>{{$data->target}}</td>
@@ -71,6 +76,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Entry Id</th>
+                                                    <th>Day</th>
                                                     <th>Humidity</th>
                                                     <th>Temperature</th>
                                                     <th>Target</th>
@@ -80,5 +86,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Zero config.table end -->
-                            @endsection
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Zero config.table end -->
+@endsection

@@ -5,7 +5,7 @@
             <a class="mobile-menu" id="mobile-collapse" href="#!">
                 <i class="feather icon-menu"></i>
             </a>
-            <a href="index-1.htm">
+            <a href="/dashboard">
                 <img class="img-fluid" src="{{asset('assets/assets\images\logo.png')}}" alt="Theme-Logo">
             </a>
             <a class="mobile-options">

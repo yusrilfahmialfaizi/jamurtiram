@@ -1,4 +1,4 @@
-<!-- Required Jquery -->
+<script data-cfasync="false" src="..\..\..\cdn-cgi\scripts\5c5dd728\cloudflare-static\email-decode.min.js"></script>
 <script type="text/javascript" src="{{asset('assets\bower_components\jquery\js\jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\bower_components\jquery-ui\js\jquery-ui.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\bower_components\popper.js\js\popper.min.js')}}"></script>
@@ -8,7 +8,6 @@
 </script>
 <!-- modernizr js -->
 <script type="text/javascript" src="{{asset('assets\bower_components\modernizr\js\modernizr.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\bower_components\modernizr\js\css-scrollbars.js')}}"></script>
 <!-- Chart js -->
 <script type="text/javascript" src="{{asset('assets\bower_components\chart.js\js\Chart.js')}}"></script>
 <!-- amchart js -->
@@ -19,13 +18,14 @@
 <script type="text/javascript" src="{{asset('assets\assets\js\SmoothScroll.js')}}"></script>
 <script src="{{asset('assets\assets\js\pcoded.min.js')}}"></script>
 
-<!-- Morris Chart js -->
-<script src="{{asset('assets\bower_components\raphael\js\raphael.min.js')}}"></script>
-<script src="{{asset('assets\bower_components\morris.js\js\morris.js')}}"></script>
-<!-- Float Chart js -->
-<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.js')}}"></script>
-<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.categories.js')}}"></script>
-<script src="{{asset('assets\assets\pages\chart\float\jquery.flot.pie.js')}}"></script>
+<!-- knob js -->
+<script src="{{asset('assets\assets\pages\chart\knob\jquery.knob.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\pages\chart\knob\knob-custom-chart.js')}}"></script>
+
+<!-- sweet alert js -->
+<script type="text/javascript" src="{{asset('assets\bower_components\sweetalert\js\sweetalert.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets\assets\js\modal.js')}}"></script>
+
 <!-- data-table js -->
 <script src="{{asset('assets\bower_components\datatables.net\js\jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js')}}"></script>
@@ -38,43 +38,14 @@
 <script src="{{asset('assets\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js')}}"></script>
 <script src="{{asset('assets\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js')}}">
 </script>
-<!-- i18next.min.js -->
-<script type="text/javascript" src="{{asset('assets\bower_components\i18next\js\i18next.min.js')}}"></script>
-<script type="text/javascript"
-    src="{{asset('assets\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js')}}"></script>
-<script type="text/javascript"
-    src="{{asset('assets\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js')}}">
-</script>
-<script type="text/javascript" src="{{asset('assets\bower_components\jquery-i18next\js\jquery-i18next.min.js')}}">
-</script>
-<!-- Custom js -->
-<script type="text/javascript" src="{{asset('assets\assets\pages\widget\custom-widget1.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\assets\js\SmoothScroll.js')}}"></script>
-<script src="{{asset('assets\assets\js\jquery.mCustomScrollbar.concat.min.js')}}"></script>
-<script src="{{asset('assets\assets\js\jquery.mousewheel.min.js')}}"></script>
-<script src="{{asset('assets\assets\js\pcoded.min.js')}}"></script>
-<script src="{{asset('assets\assets\js\vartical-layout.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\assets\js\script.js')}}"></script>
-
-<!-- Switch component js -->
-<script type="text/javascript" src="{{asset('assets\bower_components\switchery\js\switchery.min.js')}}"></script>
-<!-- Tags js -->
-<script type="text/javascript" src="{{asset('assets\bower_components\bootstrap-tagsinput\js\bootstrap-tagsinput.js')}}">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<!-- Max-length js -->
-<script type="text/javascript" src="{{asset('assets\bower_components\bootstrap-maxlength\js\bootstrap-maxlength.js')}}">
-</script>
-<script type="text/javascript" src="{{asset('assets\assets\pages\advance-elements\swithces.js')}}"></script>
-
-
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-<!-- knob js -->
-<script src="{{asset('assets\assets\pages\chart\knob\jquery.knob.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets\assets\pages\chart\knob\knob-custom-chart.js')}}"></script>
-<!-- custom js -->
-{{-- <script src="{{asset('assets\assets\pages\chart\morris\morris-custom-chart.js')}}"></script> --}}
+<script src="{{asset('assets\assets\pages\data-table\extensions\buttons\js\extension-btns-custom.js')}}"></script>
 <script src="{{asset('assets\assets\pages\data-table\js\data-table-custom.js')}}"></script>
+
+<!-- Morris Chart js -->
+<script src="{{asset('assets\bower_components\raphael\js\raphael.min.js')}}"></script>
+<script src="{{asset('assets\bower_components\morris.js\js\morris.js')}}"></script>
+
+<!-- custom js -->
 <script src="{{asset('assets\assets\js\vartical-layout.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\pages\dashboard\custom-dashboard.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets\assets\js\script.min.js')}}"></script>

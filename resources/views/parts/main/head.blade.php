@@ -51,6 +51,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
 
+    <!-- sweet alert framework -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets\bower_components\sweetalert\css\sweetalert.css')}}">
+    <!-- animation nifty modal window effects css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets\assets\css\component.css')}}">
+
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js"></script> --}}
 

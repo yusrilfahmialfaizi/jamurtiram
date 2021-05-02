@@ -46,7 +46,7 @@
                                         it with your own ables is to call the construction function:
                                         $().DataTable();.</span> --}}
                                     <center>
-                                        <h4>Pengujian Data</h4>
+                                        <h4>Simulasi Analisis Data Mandiri</h4>
                                     </center>
 
                                 </div>
@@ -139,74 +139,83 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label" id="label_NF">Nilai Fuzzy</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="nilai_fuzzy" id="nilai_fuzzy" class="form-control" readonly>
+                                            <input type="text" name="nilai_fuzzy" id="nilai_fuzzy" class="form-control"
+                                                readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label" id="label_HF">Hasil Fuzzy</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="hasil_fuzzy" id="hasil_fuzzy" class="form-control" readonly>
+                                            <input type="text" name="hasil_fuzzy" id="hasil_fuzzy" class="form-control"
+                                                readonly>
                                         </div>
                                     </div>
                                     {{-- </form> --}}
 
                                 </div>
                             </div>
-                            <script type="text/javascript">
-                                $(document).ready(function () {
-                                    document.getElementById("label_hasil").style.display        = 'none';
-                                    document.getElementById("output").style.display             = 'none';
-                                    document.getElementById("label_Ta").style.display           = 'none';
-                                    document.getElementById("hasil").style.display              = 'none';
-                                    document.getElementById("label_T").style.display            = 'none';
-                                    document.getElementById("target").style.display             = 'none';
-                                    document.getElementById("label_NF").style.display           = 'none';
-                                    document.getElementById("nilai_fuzzy").style.display        = 'none';
-                                    document.getElementById("label_HF").style.display           = 'none';
-                                    document.getElementById("hasil_fuzzy").style.display        = 'none';
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById("label_hasil").style.display = 'none';
+        document.getElementById("output").style.display = 'none';
+        document.getElementById("label_Ta").style.display = 'none';
+        document.getElementById("hasil").style.display = 'none';
+        document.getElementById("label_T").style.display = 'none';
+        document.getElementById("target").style.display = 'none';
+        document.getElementById("label_NF").style.display = 'none';
+        document.getElementById("nilai_fuzzy").style.display = 'none';
+        document.getElementById("label_HF").style.display = 'none';
+        document.getElementById("hasil_fuzzy").style.display = 'none';
 
-                                    $("#analys").on('click', function () {
-                                        var learning_rate = $('#learning_rate').val();
-                                        var epoch = $('#epoch').val();
-                                        var error = $('#error').val();
-                                        var suhu = $('#suhu').val();
-                                        var kelembapan = $('#kelembapan').val();
+        $("#analys").on('click', function () {
+            var learning_rate = $('#learning_rate').val();
+            var epoch = $('#epoch').val();
+            var error = $('#error').val();
+            var suhu = $('#suhu').val();
+            var kelembapan = $('#kelembapan').val();
 
-                                        $.ajax({
-                                            url: "{{URL::to('perhitungan/training')}}",
-                                            type: 'POST',
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
-                                                    .attr('content')
-                                            },
-                                            // dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-                                            dataType: 'json',
-                                            data: {
-                                                learning_rate: learning_rate,
-                                                epoch: epoch,
-                                                error: error,
-                                                suhu: suhu,
-                                                kelembapan: kelembapan
-                                            },
-                                            cache: false,
-                                            success: function (data) {
-                                                console.log(data);
-                                                document.getElementById("label_hasil").style.display    = 'block';
-                                                document.getElementById("output").style.display         = 'block';
-                                                document.getElementById("label_Ta").style.display       = 'block';
-                                                document.getElementById("hasil").style.display          = 'block';
-                                                document.getElementById("label_T").style.display        = 'block';
-                                                document.getElementById("target").style.display         = 'block';
-                                                document.getElementById("label_NF").style.display           = 'block';
-                                                document.getElementById("nilai_fuzzy").style.display        = 'block';
-                                                document.getElementById("label_HF").style.display           = 'block';
-                                                document.getElementById("hasil_fuzzy").style.display        = 'block';
-                                                document.getElementById("output").value         = data.hasil;
-                                                document.getElementById("target").value         = data.target;
-                                                document.getElementById("hasil").value          = data.hasil_akhir;
-                                                document.getElementById("nilai_fuzzy").value    = data.nilai_fuzzy;
-                                                document.getElementById("hasil_fuzzy").value    = data.fuzzy_output;
-                                            }
-                                        })
-                                    })
-                                });
-                            </script>
-                            @endsection
+            $.ajax({
+                url: "{{URL::to('perhitungan/training')}}",
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                        .attr('content')
+                },
+                // dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+                dataType: 'json',
+                data: {
+                    learning_rate: learning_rate,
+                    epoch: epoch,
+                    error: error,
+                    suhu: suhu,
+                    kelembapan: kelembapan
+                },
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    document.getElementById("label_hasil").style.display = 'block';
+                    document.getElementById("output").style.display = 'block';
+                    document.getElementById("label_Ta").style.display = 'block';
+                    document.getElementById("hasil").style.display = 'block';
+                    document.getElementById("label_T").style.display = 'block';
+                    document.getElementById("target").style.display = 'block';
+                    document.getElementById("label_NF").style.display = 'block';
+                    document.getElementById("nilai_fuzzy").style.display = 'block';
+                    document.getElementById("label_HF").style.display = 'block';
+                    document.getElementById("hasil_fuzzy").style.display = 'block';
+                    document.getElementById("output").value = data.hasil;
+                    document.getElementById("target").value = data.target;
+                    document.getElementById("hasil").value = data.hasil_akhir;
+                    document.getElementById("nilai_fuzzy").value = data.nilai_fuzzy;
+                    document.getElementById("hasil_fuzzy").value = data.fuzzy_output;
+                }
+            })
+        })
+    });
+</script>
+@endsection
