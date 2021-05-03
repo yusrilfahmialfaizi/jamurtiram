@@ -24,6 +24,7 @@ class PerhitunganController extends Controller
         $suhu               = $request->input("suhu");
         $kelembapan         = $request->input("kelembapan");
         $thresh             = $request->input("error");
+        // $thresh             = 0.0000001;
         $count              = DB::table("data_training")->count();
         $niu                = 0.25;
 
@@ -86,23 +87,23 @@ class PerhitunganController extends Controller
         // $bX1Z3      = round(($beta*$bX1Z3)/$V3, 2);
         // $bX2Z3      = round(($beta*$bX1Z3)/$V3, 2);
         
-        $bX0Z1      = 0.34; // bobot bias to z1
-        $bX0Z2      = -0.75; // bobot bias to z2
-        $bX0Z3      = -1.14; // bobot bias to z3
+        $bX0Z1      = -0.95; // bobot bias to z1
+        $bX0Z2      = 0.88; // bobot bias to z2
+        $bX0Z3      = 0.13; // bobot bias to z3
         
-        $bX1Z1      = 1.13;
-        $bX2Z1      = -0.38;
+        $bX1Z1      = -0.3;
+        $bX2Z1      = -0.59;
         
-        $bX1Z2      = 0.86;
-        $bX2Z2      = 7.43;
+        $bX1Z2      = 1.08;
+        $bX2Z2      = 2.9;
         
-        $bX1Z3      = 0.86;
-        $bX2Z3      = 7.43;
+        $bX1Z3      = -1.21;
+        $bX2Z3      = -2.93;
         
-        $bZ0Y       = 0.31; // bobot bias to Y
-        $bZ1Y       = -0.2;
-        $bZ2Y       = -0.4;
-        $bZ3Y       = 0.3;
+        $bZ0Y       = 0.58; // bobot bias to Y
+        $bZ1Y       = -0.4;
+        $bZ2Y       = -0.2;
+        $bZ3Y       = -0.3;
 
         // $bX0Z1      = 0.84; // bobot bias to z1
         // $bX0Z2      = -1.11; // bobot bias to z2
@@ -458,16 +459,16 @@ class PerhitunganController extends Controller
         $fuzzy_output = '';
         $nilai_fuzzy = 0;
 
-        if ($Y <= 0.547) {
+        if (round($Y, 4) <= 0.5559) {
             # code...
             $nilai_fuzzy = 1;
             $fuzzy_output = 'Buruk';
 
         }
-        if ($Y > 0.547 && $Y < 0.571) {
+        if (round($Y, 4) > 0.5559 && round($Y, 4) < 0.5630) {
             # code...
-            $buruk  = (0.547 - $Y) / (0.571 - 0.547);
-            $baik   = ($Y - 0.547) / (0.571 - 0.547);
+            $buruk  = (0.5559 - round($Y, 4)) / (0.5630 - 0.5559);
+            $baik   = (round($Y, 4) - 0.5559) / (0.5630 - 0.5559);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -476,14 +477,14 @@ class PerhitunganController extends Controller
                 $nilai_fuzzy = $buruk;
             }
         }
-        if ($Y >= 0.571 && $Y <= 0.5782 ) {
+        if (round($Y, 4) >= 0.5630 && round($Y, 4) <= 0.5836 ) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = 1;
         }
 
-        if ($Y > 0.5782 && $Y < 0.5783 ) {
-            $buruk  = (0.5782 - $Y) / (0.5783 - 0.5782);
-            $baik   = ($Y - 0.5782) / (0.5783 - 0.5782);
+        if (round($Y, 4) > 0.5836 && round($Y, 4) < 0.5854 ) {
+            $buruk  = (0.5836 - round($Y, 4)) / (0.5854 - 0.5836);
+            $baik   = ($Y - 0.5836) / (0.5854 - 0.5836);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -493,7 +494,7 @@ class PerhitunganController extends Controller
             }
         }
 
-        if ($Y >= 0.5783) {
+        if ($Y >= 0.5854) {
             $fuzzy_output = 'Buruk';
             $nilai_fuzzy = 1;
         }

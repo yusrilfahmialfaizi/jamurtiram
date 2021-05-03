@@ -242,16 +242,16 @@
                                             <div class="col-md-4">
                                                 <select name="pengujian" id="pengujian" class="form-control">
                                                     <option value="&nbsp">-- Pilih --</option>
-                                                    <option value="1">Pengujian 1</option>
-                                                    <option value="2">Pengujian 2</option>
-                                                    <option value="3">Pengujian 3</option>
-                                                    <option value="4">Pengujian 4</option>
-                                                    <option value="5">Pengujian 5</option>
-                                                    <option value="6">Pengujian 6</option>
-                                                    <option value="7">Pengujian 7</option>
-                                                    <option value="8">Pengujian 8</option>
-                                                    <option value="9">Pengujian 9</option>
-                                                    <option value="10">Pengujian 10</option>
+                                                    <option value="0">Pengujian 1</option>
+                                                    <option value="1">Pengujian 2</option>
+                                                    <option value="2">Pengujian 3</option>
+                                                    <option value="3">Pengujian 4</option>
+                                                    <option value="4">Pengujian 5</option>
+                                                    <option value="5">Pengujian 6</option>
+                                                    <option value="6">Pengujian 7</option>
+                                                    <option value="7">Pengujian 8</option>
+                                                    <option value="8">Pengujian 9</option>
+                                                    <option value="9">Pengujian 10</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -56,39 +56,57 @@ class AnalisaDataTestController extends Controller
             // echo $beta*100 . "\n";
             // echo $bias."\n";
             
-            $bX0Z1      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z1
-            $bX0Z2      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z2
-            $bX0Z3      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z3
+            // $bX0Z1      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z1
+            // $bX0Z2      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z2
+            // $bX0Z3      = rand(-$beta * 100, $beta * 100)/100; // bobot bias to z3
             
-            $bX1Z1      = rand(-5, 5) / 10;
-            $bX1Z2      = rand(-5, 5) / 10;
-            $bX1Z3      = rand(-5, 5) / 10;
+            // $bX1Z1      = rand(-5, 5) / 10;
+            // $bX1Z2      = rand(-5, 5) / 10;
+            // $bX1Z3      = rand(-5, 5) / 10;
             
-            $bX2Z1      = rand(-5, 5) / 10;
-            $bX2Z2      = rand(-5, 5) / 10;
-            $bX2Z3      = rand(-5, 5) / 10;
-            
-            
-            $bZ0Y       = rand(-$beta * 100, $beta * 100)/100; // bobot bias to Y
-            
-            $bZ1Y       = rand(-5, 5) / 10;
-            $bZ2Y       = rand(-5, 5) / 10;
-            $bZ3Y       = rand(-5, 5) / 10;
+            // $bX2Z1      = rand(-5, 5) / 10;
+            // $bX2Z2      = rand(-5, 5) / 10;
+            // $bX2Z3      = rand(-5, 5) / 10;
             
             
-            $V1         = round(sqrt((pow($bX1Z1,2) + pow($bX1Z2,2))),2);
-            $V2         = round(sqrt((pow($bX2Z1,2) + pow($bX2Z2,2))),2);
-            $V3         = round(sqrt((pow($bX1Z3,2) + pow($bX2Z3,2))),2);
+            // $bZ0Y       = rand(-$beta * 100, $beta * 100)/100; // bobot bias to Y
+            
+            // $bZ1Y       = rand(-5, 5) / 10;
+            // $bZ2Y       = rand(-5, 5) / 10;
+            // $bZ3Y       = rand(-5, 5) / 10;
             
             
-            $bX1Z1      = round(($beta*$bX1Z1)/$V1, 2);
-            $bX2Z1      = round(($beta*$bX2Z1)/$V1, 2);
+            // $V1         = round(sqrt((pow($bX1Z1,2) + pow($bX1Z2,2))),2);
+            // $V2         = round(sqrt((pow($bX2Z1,2) + pow($bX2Z2,2))),2);
+            // $V3         = round(sqrt((pow($bX1Z3,2) + pow($bX2Z3,2))),2);
             
-            $bX1Z2      = round(($beta*$bX1Z2)/$V2, 2);
-            $bX2Z2      = round(($beta*$bX1Z2)/$V2, 2);
             
-            $bX1Z3      = round(($beta*$bX1Z3)/$V3, 2);
-            $bX2Z3      = round(($beta*$bX1Z3)/$V3, 2);
+            // $bX1Z1      = round(($beta*$bX1Z1)/$V1, 2);
+            // $bX2Z1      = round(($beta*$bX2Z1)/$V1, 2);
+            
+            // $bX1Z2      = round(($beta*$bX1Z2)/$V2, 2);
+            // $bX2Z2      = round(($beta*$bX1Z2)/$V2, 2);
+            
+            // $bX1Z3      = round(($beta*$bX1Z3)/$V3, 2);
+            // $bX2Z3      = round(($beta*$bX1Z3)/$V3, 2);
+
+            $bX0Z1      = -0.95; // bobot bias to z1
+            $bX0Z2      = 0.88; // bobot bias to z2
+            $bX0Z3      = 0.13; // bobot bias to z3
+            
+            $bX1Z1      = -0.3;
+            $bX2Z1      = -0.59;
+            
+            $bX1Z2      = 1.08;
+            $bX2Z2      = 2.9;
+            
+            $bX1Z3      = -1.21;
+            $bX2Z3      = -2.93;
+            
+            $bZ0Y       = 0.58; // bobot bias to Y
+            $bZ1Y       = -0.4;
+            $bZ2Y       = -0.2;
+            $bZ3Y       = -0.3;
             
             $bobot_awal =[
                 "bX0Z1t0"      => $bX0Z1, // bobot bias to z1
@@ -464,16 +482,16 @@ class AnalisaDataTestController extends Controller
         $fuzzy_output = '';
         $nilai_fuzzy = 0;
 
-        if ($Y <= 0.547) {
+        if (round($Y, 4) <= 0.5559) {
             # code...
             $nilai_fuzzy = 1;
             $fuzzy_output = 'Buruk';
 
         }
-        if ($Y > 0.547 && $Y < 0.571) {
+        if (round($Y, 4) > 0.5559 && round($Y, 4) < 0.5630) {
             # code...
-            $buruk  = (0.547 - $Y) / (0.571 - 0.547);
-            $baik   = ($Y - 0.547) / (0.571 - 0.547);
+            $buruk  = (0.5559 - round($Y, 4)) / (0.5630 - 0.5559);
+            $baik   = (round($Y, 4) - 0.5559) / (0.5630 - 0.5559);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -482,14 +500,14 @@ class AnalisaDataTestController extends Controller
                 $nilai_fuzzy = $buruk;
             }
         }
-        if ($Y >= 0.571 && $Y <= 0.5782 ) {
+        if (round($Y, 4) >= 0.5630 && round($Y, 4) <= 0.5836 ) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = 1;
         }
 
-        if ($Y > 0.5782 && $Y < 0.5783 ) {
-            $buruk  = (0.5782 - $Y) / (0.5783 - 0.5782);
-            $baik   = ($Y - 0.5782) / (0.5783 - 0.5782);
+        if (round($Y, 4) > 0.5836 && round($Y, 4) < 0.5854 ) {
+            $buruk  = (0.5836 - round($Y, 4)) / (0.5854 - 0.5836);
+            $baik   = ($Y - 0.5836) / (0.5854 - 0.5836);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -499,7 +517,7 @@ class AnalisaDataTestController extends Controller
             }
         }
 
-        if ($Y >= 0.5783) {
+        if ($Y >= 0.5854) {
             $fuzzy_output = 'Buruk';
             $nilai_fuzzy = 1;
         }
