@@ -31,3 +31,4 @@ Route::get('/analisis-datatest', 'AnalisaDataTestController@index');
 Route::post('/analisis-data', 'AnalisaDataTestController@train');
 // Route::get('/hasil-analisa', 'AnalisaDataTestController@hasil_analisa')->name('hasil-analisa');
 Route::name('hasil-analisa')->get('/analisis-datatest/hasil-analisa', 'AnalisaDataTestController@hasil_analisa');
+Route::get('/manual', 'PerhitunganController@manual');

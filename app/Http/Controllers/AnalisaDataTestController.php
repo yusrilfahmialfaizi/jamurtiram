@@ -482,16 +482,16 @@ class AnalisaDataTestController extends Controller
         $fuzzy_output = '';
         $nilai_fuzzy = 0;
 
-        if (round($Y, 4) <= 0.5559) {
+        if (round($Y, 5) <= 0.5559) {
             # code...
             $nilai_fuzzy = 1;
             $fuzzy_output = 'Buruk';
 
         }
-        if (round($Y, 4) > 0.5559 && round($Y, 4) < 0.5630) {
+        if (round($Y, 5) > 0.5559 && round($Y, 5) < 0.5630) {
             # code...
-            $buruk  = (0.5559 - round($Y, 4)) / (0.5630 - 0.5559);
-            $baik   = (round($Y, 4) - 0.5559) / (0.5630 - 0.5559);
+            $buruk  = (0.5559 - round($Y, 5)) / (0.5630 - 0.5559);
+            $baik   = (round($Y, 5) - 0.5559) / (0.5630 - 0.5559);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
@@ -500,14 +500,14 @@ class AnalisaDataTestController extends Controller
                 $nilai_fuzzy = $buruk;
             }
         }
-        if (round($Y, 4) >= 0.5630 && round($Y, 4) <= 0.5836 ) {
+        if (round($Y, 5) >= 0.5630 && round($Y, 5) <= 0.5836 ) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = 1;
         }
 
-        if (round($Y, 4) > 0.5836 && round($Y, 4) < 0.5854 ) {
-            $buruk  = (0.5836 - round($Y, 4)) / (0.5854 - 0.5836);
-            $baik   = ($Y - 0.5836) / (0.5854 - 0.5836);
+        if (round($Y, 5) > 0.5836 && round($Y, 5) < 0.5854 ) {
+            $buruk  = (0.5836 - round($Y, 5)) / (0.5854 - 0.5836);
+            $baik   = (round($Y, 5) - 0.5836) / (0.5854 - 0.5836);
             if ($baik > $buruk) {
                 $fuzzy_output = 'Baik';
                 $nilai_fuzzy = $baik;
