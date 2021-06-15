@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 Route::get('/', 'AuthController@index');
+Route::post('/auth', 'AuthController@auth');
+Route::get('/logout', 'AuthController@logout');
 Route::get('/dashboard', 'DashboardController@index');
 Route::get('/data-training', 'DataController@index');
 Route::get('/data-testing', 'DataPengujianController@index');

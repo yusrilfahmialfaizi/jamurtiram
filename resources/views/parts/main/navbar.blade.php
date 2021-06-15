@@ -36,7 +36,7 @@
                 </li>
             </ul>
             <ul class="nav-right">
-                <li><a href="#!"><i class="feather icon-power"></i></a></li>
+                <li><a href="/logout"><i class="feather icon-power"></i></a></li>
                 {{-- <li class="header-notification">
                     <div class="dropdown-primary dropdown">
                         <div class="dropdown-toggle" data-toggle="dropdown">

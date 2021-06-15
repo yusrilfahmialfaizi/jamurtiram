@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\DB;
 class PengujianController extends Controller
 {
     //
-    function index(){
+    function index(Request $request){
+        if ($request->session()->get('status') != 'login'){
+                return redirect('/');
+            };
         return view('contents/main/pengujian');
     }
 

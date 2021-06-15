@@ -59,7 +59,7 @@
                                         <label class="col-sm-2 col-form-label">Learning Rate</label>
                                         <div class="col-sm-2">
                                             <select name="learning_rate" id="learning_rate" class="form-control">
-                                                <option value="0.1">default</option>
+                                                <option value="0.2">default</option>
                                                 <option value="0.01">0.01</option>
                                                 <option value="0.02">0.02</option>
                                                 <option value="0.03">0.03</option>
@@ -76,7 +76,7 @@
                                         <label class="col-sm-2 col-form-label">Epoch</label>
                                         <div class="col-sm-2">
                                             <select name="epoch" id="epoch" class="form-control">
-                                                <option value="1000">default</option>
+                                                <option value="600">default</option>
                                                 <option value="100">100</option>
                                                 <option value="200">200</option>
                                                 <option value="300">300</option>

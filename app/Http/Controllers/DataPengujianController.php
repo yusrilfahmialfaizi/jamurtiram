@@ -9,7 +9,10 @@ class DataPengujianController extends Controller
 {
     //
 
-    function index(){
+    function index(Request $request){
+        if ($request->session()->get('status') != 'login'){
+                return redirect('/');
+            };
         $dataset =DB::table('data_testing')->get();
         return view('contents/main/data_testing', ['dataset' => $dataset]);
     }
